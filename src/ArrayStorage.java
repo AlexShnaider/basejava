@@ -13,7 +13,7 @@ public class ArrayStorage {
     }
 
     void save(Resume r) {
-        if (isResumeExist(r.uuid)) {
+        if (getIndexOfResume(r.uuid) >= 0) {
             System.out.println("The resume is already exist in the ArrayStorage");
         } else if (size < storage.length) {
             storage[size++] = r;
@@ -23,37 +23,33 @@ public class ArrayStorage {
     }
 
     void update(Resume r) {
-        for (int i = 0; i < size; i++) {
-            if (storage[i].uuid.equals(r.uuid)) {
-                storage[i] = r;
-                return;
-            }
+        int index = getIndexOfResume(r.uuid);
+        if (index < 0) {
+            noResumeMessage();
+        } else {
+            storage[index] = r;
         }
-        noResumeMessage();
     }
 
     Resume get(String uuid) {
-        for (Resume resume : getAll()) {
-            if (resume.uuid.equals(uuid)) {
-                return resume;
-            }
+        int index = getIndexOfResume(uuid);
+        if (index < 0) {
+            noResumeMessage();
+            return null;
+        } else {
+            return storage[index];
         }
-        noResumeMessage();
-        return null;
     }
 
     void delete(String uuid) {
-        if (!isResumeExist(uuid)) {
+        int index = getIndexOfResume(uuid);
+        if (index < 0) {
             noResumeMessage();
         } else if (size == 1) {
             storage[--size] = null;
         } else {
-            for (int i = 0; i < size; i++) {
-                if (storage[i].uuid.equals(uuid)) {
-                    storage[i] = storage[--size];
-                    storage[size] = null;
-                }
-            }
+            storage[index] = storage[--size];
+            storage[size] = null;
         }
 
     }
@@ -69,13 +65,13 @@ public class ArrayStorage {
         return size;
     }
 
-    private boolean isResumeExist(String uuid) {
-        for (Resume resume : getAll()) {
-            if (resume.uuid.equals(uuid)) {
-                return true;
+    private int getIndexOfResume(String uuid) {
+        for (int i = 0; i < size; i++) {
+            if (storage[i].uuid.equals(uuid)) {
+                return i;
             }
         }
-        return false;
+        return -1;
     }
 
     private void noResumeMessage() {
