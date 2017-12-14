@@ -3,10 +3,18 @@ package ru.javawebinar.basejava.model;
 /**
  * com.urise.webapp.model.Resume class
  */
-public class Resume {
+public class Resume implements Comparable<Resume> {
 
     // Unique identifier
     private String uuid;
+
+    public Resume() {
+        this.uuid = "";
+    }
+
+    public Resume(String uuid) {
+        this.uuid = uuid;
+    }
 
     public String getUuid() {
         return uuid;
@@ -34,5 +42,10 @@ public class Resume {
     @Override
     public int hashCode() {
         return uuid.hashCode();
+    }
+
+    @Override
+    public int compareTo(Resume o) {
+        return uuid.compareTo(o.getUuid());
     }
 }
