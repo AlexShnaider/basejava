@@ -18,12 +18,13 @@ public abstract class AbstractStorage implements Storage {
 
     @Override
     public void save(Resume r) {
-        if (getIndex(r.getUuid()) > -1) {
+        int index = getIndex(r.getUuid());
+        if (index > -1) {
             System.out.println("The resume is already exist in the Storage");
         } else if (size == MAX_VALUE) {
             System.out.println("Storage overflow");
         } else {
-            add(r);
+            add(r, -index);
         }
     }
 
@@ -71,7 +72,7 @@ public abstract class AbstractStorage implements Storage {
 
     protected abstract int getIndex(String uuid);
 
-    protected abstract void add(Resume r);
+    protected abstract void add(Resume r, int index);
 
     protected abstract void remove(int index);
 

@@ -12,20 +12,10 @@ public class SortedArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected void add(Resume r) {
-        int left = 0;
-        int right = size;
-        int middle;
-        while (left < right) {
-            middle = (left + right) / 2;
-            if (storage[middle].compareTo(r) > 0) {
-                right = middle;
-            } else {
-                left = middle + 1;
-            }
-        }
-        System.arraycopy(storage, left, storage, left + 1, size - left);
-        storage[left] = r;
+    protected void add(Resume r, int index) {
+        --index;
+        System.arraycopy(storage, index, storage, index + 1, size - index);
+        storage[index] = r;
         size++;
     }
 
