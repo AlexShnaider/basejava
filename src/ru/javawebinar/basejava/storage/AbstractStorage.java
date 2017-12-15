@@ -19,9 +19,9 @@ public abstract class AbstractStorage implements Storage {
     @Override
     public void save(Resume r) {
         if (getIndex(r.getUuid()) > -1) {
-            System.out.println("The resume is already exist in the ArrayStorage");
+            System.out.println("The resume is already exist in the Storage");
         } else if (size == MAX_VALUE) {
-            System.out.println("ArrayStorage overflow");
+            System.out.println("Storage overflow");
         } else {
             add(r);
         }
@@ -30,7 +30,7 @@ public abstract class AbstractStorage implements Storage {
     @Override
     public void update(Resume r) {
         int index = getIndex(r.getUuid());
-        if (index == -1) {
+        if (index < 0) {
             noResumeMessage();
         } else {
             storage[index] = r;
@@ -40,7 +40,7 @@ public abstract class AbstractStorage implements Storage {
     @Override
     public Resume get(String uuid) {
         int index = getIndex(uuid);
-        if (index == -1) {
+        if (index < 0) {
             noResumeMessage();
             return null;
         } else {
@@ -51,7 +51,7 @@ public abstract class AbstractStorage implements Storage {
     @Override
     public void delete(String uuid) {
         int index = getIndex(uuid);
-        if (index == -1) {
+        if (index < 0) {
             noResumeMessage();
         } else {
             remove(index);
@@ -76,6 +76,6 @@ public abstract class AbstractStorage implements Storage {
     protected abstract void remove(int index);
 
     protected void noResumeMessage() {
-        System.out.println("There is no such resume in the ArrayStorage");
+        System.out.println("There is no such resume in the Storage");
     }
 }
