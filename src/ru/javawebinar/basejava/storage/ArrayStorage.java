@@ -19,12 +19,11 @@ public class ArrayStorage extends AbstractStorage {
 
     @Override
     protected void add(Resume r, int index) {
-        storage[size++] = r;
+        storage[size] = r;
     }
 
     @Override
     protected void remove(int index) {
-        storage[index] = storage[--size];
-        storage[size] = null;
+        storage[index] = storage[size - 1];
     }
 }

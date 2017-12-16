@@ -1,5 +1,8 @@
 package ru.javawebinar.basejava.storage;
 
+import ru.javawebinar.basejava.Exceptions.ExistStorageException;
+import ru.javawebinar.basejava.Exceptions.NotExistStorageException;
+import ru.javawebinar.basejava.Exceptions.StorageException;
 import ru.javawebinar.basejava.model.Resume;
 
 import java.util.Arrays;
@@ -20,11 +23,12 @@ public abstract class AbstractStorage implements Storage {
     public void save(Resume r) {
         int index = getIndex(r.getUuid());
         if (index > -1) {
-            System.out.println("The resume is already exist in the Storage");
+            throw new ExistStorageException(r.getUuid());
         } else if (size == MAX_VALUE) {
-            System.out.println("Storage overflow");
+            throw new StorageException("Storage overflow", r.getUuid());
         } else {
-            add(r, -index);
+            add(r, index);
+            size++;
         }
     }
 
@@ -32,7 +36,7 @@ public abstract class AbstractStorage implements Storage {
     public void update(Resume r) {
         int index = getIndex(r.getUuid());
         if (index < 0) {
-            noResumeMessage();
+            throw new NotExistStorageException(r.getUuid());
         } else {
             storage[index] = r;
         }
@@ -42,8 +46,7 @@ public abstract class AbstractStorage implements Storage {
     public Resume get(String uuid) {
         int index = getIndex(uuid);
         if (index < 0) {
-            noResumeMessage();
-            return null;
+            throw new NotExistStorageException(uuid);
         } else {
             return storage[index];
         }
@@ -53,9 +56,11 @@ public abstract class AbstractStorage implements Storage {
     public void delete(String uuid) {
         int index = getIndex(uuid);
         if (index < 0) {
-            noResumeMessage();
+            throw new NotExistStorageException(uuid);
         } else {
             remove(index);
+            storage[size - 1] = null;
+            size--;
         }
 
     }
@@ -75,8 +80,4 @@ public abstract class AbstractStorage implements Storage {
     protected abstract void add(Resume r, int index);
 
     protected abstract void remove(int index);
-
-    protected void noResumeMessage() {
-        System.out.println("There is no such resume in the Storage");
-    }
 }
