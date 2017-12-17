@@ -2,82 +2,61 @@ package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.Exceptions.ExistStorageException;
 import ru.javawebinar.basejava.Exceptions.NotExistStorageException;
-import ru.javawebinar.basejava.Exceptions.StorageException;
 import ru.javawebinar.basejava.model.Resume;
 
-import java.util.Arrays;
-
 public abstract class AbstractStorage implements Storage {
-    protected static final int MAX_VALUE = 10000;
-
-    protected final Resume[] storage = new Resume[MAX_VALUE];
-    protected int size;
-
-    @Override
-    public void clear() {
-        Arrays.fill(storage, null);
-        size = 0;
-    }
 
     @Override
     public void save(Resume r) {
-        int index = getIndex(r.getUuid());
-        if (index > -1) {
-            throw new ExistStorageException(r.getUuid());
-        } else if (size == MAX_VALUE) {
-            throw new StorageException("Storage overflow", r.getUuid());
-        } else {
-            add(r, index);
-            size++;
-        }
+        Object searchKey = getNotExistedSearchKey(r.getUuid());
+        doSave(r, searchKey);
     }
 
     @Override
     public void update(Resume r) {
-        int index = getIndex(r.getUuid());
-        if (index < 0) {
-            throw new NotExistStorageException(r.getUuid());
-        } else {
-            storage[index] = r;
-        }
+        Object searchKey = getExistedSearchKey(r.getUuid());
+        doUpdate(r, searchKey);
     }
 
     @Override
     public Resume get(String uuid) {
-        int index = getIndex(uuid);
-        if (index < 0) {
-            throw new NotExistStorageException(uuid);
-        } else {
-            return storage[index];
-        }
+        Object searchKey = getExistedSearchKey(uuid);
+        return doGet(searchKey);
     }
+
 
     @Override
     public void delete(String uuid) {
-        int index = getIndex(uuid);
-        if (index < 0) {
+        Object searchKey = getExistedSearchKey(uuid);
+        doDelete(searchKey);
+    }
+
+    private Object getExistedSearchKey(String uuid) {
+        Object searchKey = getSearchKey(uuid);
+        if (!isExist(searchKey)) {
             throw new NotExistStorageException(uuid);
-        } else {
-            remove(index);
-            storage[size - 1] = null;
-            size--;
         }
-
+        return searchKey;
     }
 
-    @Override
-    public Resume[] getAll() {
-        return Arrays.copyOf(storage, size);
+    private Object getNotExistedSearchKey(String uuid) {
+        Object searchKey = getSearchKey(uuid);
+        if (isExist(searchKey)) {
+            throw new ExistStorageException(uuid);
+        }
+        return searchKey;
     }
 
-    @Override
-    public int size() {
-        return size;
-    }
+    protected abstract void doSave(Resume r, Object searchKey);
 
-    protected abstract int getIndex(String uuid);
+    protected abstract void doUpdate(Resume r, Object searchKey);
 
-    protected abstract void add(Resume r, int index);
+    protected abstract Resume doGet(Object searchKey);
 
-    protected abstract void remove(int index);
+    protected abstract void doDelete(Object searchKey);
+
+    protected abstract boolean isExist(Object searchKey);
+
+    protected abstract Object getSearchKey(String uuid);
+
 }
