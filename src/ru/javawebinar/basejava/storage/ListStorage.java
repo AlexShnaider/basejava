@@ -3,7 +3,9 @@ package ru.javawebinar.basejava.storage;
 import ru.javawebinar.basejava.model.Resume;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.ListIterator;
 
 public class ListStorage extends AbstractStorage {
     private final List<Resume> storage = new ArrayList<>();
@@ -14,8 +16,9 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected void doUpdate(Resume r, Object searchKey) {
-        storage.add(r);
+    protected void doUpdate(Resume r, Object index) {
+        storage.remove((int) index);
+        storage.add((int) index, r);
     }
 
     @Override
@@ -25,7 +28,7 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     protected void doDelete(Object index) {
-        storage.remove((Integer) index);
+        storage.remove((int) index);
     }
 
     @Override
@@ -35,7 +38,13 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     protected Integer getSearchKey(String uuid) {
-        return storage.indexOf(new Resume(uuid));
+        ListIterator<Resume> itr = storage.listIterator();
+        for (int i = 0; itr.hasNext(); i++) {
+            if (itr.next().getUuid().equals(uuid)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     @Override
@@ -45,7 +54,8 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     public Resume[] getAll() {
-        return (Resume[]) storage.toArray();
+        Object[] objArray = storage.toArray();
+        return Arrays.copyOf(objArray, objArray.length, Resume[].class);
     }
 
     @Override
