@@ -46,13 +46,6 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    public List<Resume> getAllSorted() {
-        Resume[] answer = Arrays.copyOf(storage, size);
-        Arrays.sort(answer);
-        return Arrays.asList(answer);
-    }
-
-    @Override
     public int size() {
         return size;
     }
@@ -60,6 +53,12 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     @Override
     protected boolean isExist(Object index) {
         return (Integer) index >= 0;
+    }
+
+    @Override
+    protected List<Resume> getAllAsList() {
+        Resume[] answer = Arrays.copyOf(storage, size);
+        return Arrays.asList(answer);
     }
 
     protected abstract Integer getSearchKey(String uuid);
