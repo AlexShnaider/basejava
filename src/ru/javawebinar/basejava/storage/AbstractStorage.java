@@ -4,7 +4,7 @@ import ru.javawebinar.basejava.Exceptions.ExistStorageException;
 import ru.javawebinar.basejava.Exceptions.NotExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
 
-import java.util.Comparator;
+import java.util.Collections;
 import java.util.List;
 
 public abstract class AbstractStorage implements Storage {
@@ -37,7 +37,7 @@ public abstract class AbstractStorage implements Storage {
     @Override
     public List<Resume> getAllSorted() {
         List<Resume> answer = getAllAsList();
-        answer.sort(Comparator.comparing(Resume::getFullName));
+        Collections.sort(answer);
         return answer;
     }
 

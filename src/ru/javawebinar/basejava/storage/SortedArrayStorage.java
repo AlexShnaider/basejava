@@ -3,12 +3,13 @@ package ru.javawebinar.basejava.storage;
 import ru.javawebinar.basejava.model.Resume;
 
 import java.util.Arrays;
+import java.util.Comparator;
 
 public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
     protected Integer getSearchKey(String uuid) {
-        return Arrays.binarySearch(storage, 0, size, new Resume(uuid, null));
+        return Arrays.binarySearch(storage, 0, size, new Resume(uuid, "dummy"), Comparator.comparing(Resume::getUuid));
     }
 
     @Override

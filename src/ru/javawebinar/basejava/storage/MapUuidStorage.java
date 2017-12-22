@@ -19,17 +19,17 @@ public class MapUuidStorage extends AbstractStorage {
 
     @Override
     protected Resume doGet(Object searchKey) {
-        return storage.get(searchKey);
+        return storage.get((String) searchKey);
     }
 
     @Override
     protected void doDelete(Object searchKey) {
-        storage.remove(searchKey);
+        storage.remove((String) searchKey);
     }
 
     @Override
     protected boolean isExist(Object searchKey) {
-        return storage.containsKey(searchKey);
+        return storage.containsKey((String) searchKey);
     }
 
     @Override
