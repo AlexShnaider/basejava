@@ -6,32 +6,32 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
-public class ListStorage extends AbstractStorage {
+public class ListStorage extends AbstractStorage<Integer> {
     private final List<Resume> storage = new ArrayList<>();
 
     @Override
-    protected void doSave(Resume r, Object searchKey) {
+    protected void doSave(Resume r, Integer searchKey) {
         storage.add(r);
     }
 
     @Override
-    protected void doUpdate(Resume r, Object index) {
-        storage.set((int) index, r);
+    protected void doUpdate(Resume r, Integer index) {
+        storage.set(index, r);
     }
 
     @Override
-    protected Resume doGet(Object index) {
-        return storage.get((Integer) index);
+    protected Resume doGet(Integer index) {
+        return storage.get(index);
     }
 
     @Override
-    protected void doDelete(Object index) {
-        storage.remove((int) index);
+    protected void doDelete(Integer index) {
+        storage.remove(index.intValue());
     }
 
     @Override
-    protected boolean isExist(Object index) {
-        return (Integer) index >= 0;
+    protected boolean isExist(Integer index) {
+        return index >= 0;
     }
 
     @Override

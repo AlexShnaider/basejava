@@ -6,7 +6,7 @@ import ru.javawebinar.basejava.model.Resume;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class AbstractArrayStorage extends AbstractStorage {
+public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     protected static final int MAX_VALUE = 10000;
 
     protected final Resume[] storage = new Resume[MAX_VALUE];
@@ -19,28 +19,28 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected void doSave(Resume r, Object index) {
+    protected void doSave(Resume r, Integer index) {
         if (size == MAX_VALUE) {
             throw new StorageException("Storage overflow", r.getUuid());
         } else {
-            add(r, (Integer) index);
+            add(r, index);
             size++;
         }
     }
 
     @Override
-    protected void doUpdate(Resume r, Object index) {
-        storage[(Integer) index] = r;
+    protected void doUpdate(Resume r, Integer index) {
+        storage[index] = r;
     }
 
     @Override
-    protected Resume doGet(Object index) {
-        return storage[(Integer) index];
+    protected Resume doGet(Integer index) {
+        return storage[index];
     }
 
     @Override
-    protected void doDelete(Object index) {
-        remove((Integer) index);
+    protected void doDelete(Integer index) {
+        remove(index);
         storage[size - 1] = null;
         size--;
     }
@@ -51,8 +51,8 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected boolean isExist(Object index) {
-        return (Integer) index >= 0;
+    protected boolean isExist(Integer index) {
+        return index >= 0;
     }
 
     @Override

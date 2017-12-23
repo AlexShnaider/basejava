@@ -1,5 +1,7 @@
 package ru.javawebinar.basejava.model;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -9,6 +11,8 @@ import java.util.UUID;
 public class Resume implements Comparable<Resume> {
     private final String uuid;
     private final String fullName;
+    private final Map<String,String> contacts = new HashMap<>();
+    private final Map<SectionTitle,Section> sections = new HashMap<>();
 
     public Resume(String fullName) {
         this(UUID.randomUUID().toString(), fullName);
@@ -19,6 +23,38 @@ public class Resume implements Comparable<Resume> {
         Objects.requireNonNull(fullName, "fullName mustn't be null");
         this.uuid = uuid;
         this.fullName = fullName;
+    }
+
+    public void addContact(String name, String address) {
+        contacts.put(name, address);
+    }
+
+    public void removeContact(String name) {
+        contacts.remove(name);
+    }
+
+    public void updateContact(String name, String address) {
+        contacts.replace(name, address);
+    }
+
+    public void getContact(String name) {
+        contacts.get(name);
+    }
+
+    public void addSection(SectionTitle name, Section section) {
+        sections.put(name, section);
+    }
+
+    public void removeSection(Section name) {
+        sections.remove(name);
+    }
+
+    public void updateSection(SectionTitle name, Section section) {
+        sections.replace(name, section);
+    }
+
+    public void getSection(Section name) {
+        sections.get(name);
     }
 
     public String getUuid() {
