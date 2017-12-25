@@ -1,5 +1,7 @@
 package ru.javawebinar.basejava.model;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -8,8 +10,8 @@ import java.util.*;
 public class Resume implements Comparable<Resume> {
     private final String uuid;
     private final String fullName;
-    private final Map<String,String> contacts = new HashMap<>();
-    private final Map<SectionTitle,Section> sections = new EnumMap<>(SectionTitle.class);
+    private final Map<String, String> contacts = new HashMap<>();
+    private final Map<SectionTitle, Section> sections = new EnumMap<>(SectionTitle.class);
 
     public Resume(String fullName) {
         this(UUID.randomUUID().toString(), fullName);
@@ -99,6 +101,33 @@ public class Resume implements Comparable<Resume> {
             answer.append(SectionTitle.QUALIFICATIONS.getTitle()).append(":").append(System.lineSeparator());
             for (String qualification : (List<String>) qualifications.getContent()) {
                 answer.append(qualification).append(System.lineSeparator());
+            }
+        }
+
+
+        Section<OrganizationSection> experiences = sections.get(SectionTitle.EXPERIENCE);
+        if (experiences != null) {
+            answer.append(SectionTitle.EXPERIENCE.getTitle()).append(":").append(System.lineSeparator());
+            for (Organization experience : (List<Organization>) experiences.getContent()) {
+                DateFormat form = new SimpleDateFormat("MM/yyyy");
+                answer.append(experience.getName()).append(System.lineSeparator())
+                        .append(form.format(experience.getStartDate())).append(" - ")
+                        .append(form.format(experience.getFinishDate())).append("   ")
+                        .append(experience.getTextTitle()).append(System.lineSeparator())
+                        .append(experience.getText()).append(System.lineSeparator());
+            }
+        }
+
+        Section<OrganizationSection> education = sections.get(SectionTitle.EDUCATION);
+        if (education != null) {
+            answer.append(SectionTitle.EDUCATION.getTitle()).append(":").append(System.lineSeparator());
+            for (Organization educ : (List<Organization>) education.getContent()) {
+                DateFormat form = new SimpleDateFormat("MM/yyyy");
+                answer.append(educ.getName()).append(System.lineSeparator())
+                        .append(form.format(educ.getStartDate())).append(" - ")
+                        .append(form.format(educ.getFinishDate())).append("   ")
+                        .append(educ.getTextTitle()).append(System.lineSeparator())
+                        .append(educ.getText()).append(System.lineSeparator());
             }
         }
 
