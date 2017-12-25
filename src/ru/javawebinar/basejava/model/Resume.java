@@ -1,9 +1,6 @@
 package ru.javawebinar.basejava.model;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * com.urise.webapp.model.Resume class
@@ -12,7 +9,7 @@ public class Resume implements Comparable<Resume> {
     private final String uuid;
     private final String fullName;
     private final Map<String,String> contacts = new HashMap<>();
-    private final Map<SectionTitle,Section> sections = new HashMap<>();
+    private final Map<SectionTitle,Section> sections = new EnumMap<>(SectionTitle.class);
 
     public Resume(String fullName) {
         this(UUID.randomUUID().toString(), fullName);
@@ -67,7 +64,45 @@ public class Resume implements Comparable<Resume> {
 
     @Override
     public String toString() {
-        return uuid + '(' + fullName + ')';
+        StringBuilder answer = new StringBuilder();
+        answer.append(fullName).append(System.lineSeparator());
+
+        if (!contacts.isEmpty()) {
+            answer.append("Contacts :").append(System.lineSeparator());
+            for (Map.Entry entry : contacts.entrySet()) {
+                answer.append(entry.getKey()).append(" : ").append(entry.getValue()).append(System.lineSeparator());
+            }
+        }
+
+        Section<TextSection> position = sections.get(SectionTitle.OBJECTIVE);
+        if (position != null) {
+            answer.append(SectionTitle.OBJECTIVE.getTitle()).append(":").append(System.lineSeparator())
+                    .append(position.getContent()).append(System.lineSeparator());
+        }
+
+        Section<TextSection> qualities = sections.get(SectionTitle.PERSONAL);
+        if (qualities != null) {
+            answer.append(SectionTitle.PERSONAL.getTitle()).append(":").append(System.lineSeparator())
+                    .append(qualities.getContent()).append(System.lineSeparator());
+        }
+
+        Section<ListSection> achievements = sections.get(SectionTitle.ACHIEVEMENT);
+        if (achievements != null) {
+            answer.append(SectionTitle.ACHIEVEMENT.getTitle()).append(":").append(System.lineSeparator());
+            for (String achievement : (List<String>) achievements.getContent()) {
+                answer.append(achievement).append(System.lineSeparator());
+            }
+        }
+
+        Section<ListSection> qualifications = sections.get(SectionTitle.QUALIFICATIONS);
+        if (qualifications != null) {
+            answer.append(SectionTitle.QUALIFICATIONS.getTitle()).append(":").append(System.lineSeparator());
+            for (String qualification : (List<String>) qualifications.getContent()) {
+                answer.append(qualification).append(System.lineSeparator());
+            }
+        }
+
+        return answer.toString();
     }
 
     @Override
