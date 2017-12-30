@@ -1,7 +1,5 @@
 package ru.javawebinar.basejava.model;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -10,8 +8,8 @@ import java.util.*;
 public class Resume implements Comparable<Resume> {
     private final String uuid;
     private final String fullName;
-    private final Map<String, String> contacts = new HashMap<>();
-    private final Map<SectionTitle, Section> sections = new EnumMap<>(SectionTitle.class);
+    private final Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
+    private final Map<SectionType, Section> sections = new EnumMap<>(SectionType.class);
 
     public Resume(String fullName) {
         this(UUID.randomUUID().toString(), fullName);
@@ -24,36 +22,8 @@ public class Resume implements Comparable<Resume> {
         this.fullName = fullName;
     }
 
-    public void addContact(String name, String address) {
-        contacts.put(name, address);
-    }
-
-    public void removeContact(String name) {
-        contacts.remove(name);
-    }
-
-    public void updateContact(String name, String address) {
-        contacts.replace(name, address);
-    }
-
-    public void getContact(String name) {
-        contacts.get(name);
-    }
-
-    public void addSection(SectionTitle name, Section section) {
+    public void addSection(SectionType name, Section section) {
         sections.put(name, section);
-    }
-
-    public void removeSection(Section name) {
-        sections.remove(name);
-    }
-
-    public void updateSection(SectionTitle name, Section section) {
-        sections.replace(name, section);
-    }
-
-    public void getSection(Section name) {
-        sections.get(name);
     }
 
     public String getUuid() {
@@ -76,56 +46,54 @@ public class Resume implements Comparable<Resume> {
             }
         }
 
-        Section<TextSection> position = sections.get(SectionTitle.OBJECTIVE);
+        Section<TextSection> position = sections.get(SectionType.OBJECTIVE);
         if (position != null) {
-            answer.append(SectionTitle.OBJECTIVE.getTitle()).append(":").append(System.lineSeparator())
+            answer.append(SectionType.OBJECTIVE.getTitle()).append(":").append(System.lineSeparator())
                     .append(position.getContent()).append(System.lineSeparator());
         }
 
-        Section<TextSection> qualities = sections.get(SectionTitle.PERSONAL);
+        Section<TextSection> qualities = sections.get(SectionType.PERSONAL);
         if (qualities != null) {
-            answer.append(SectionTitle.PERSONAL.getTitle()).append(":").append(System.lineSeparator())
+            answer.append(SectionType.PERSONAL.getTitle()).append(":").append(System.lineSeparator())
                     .append(qualities.getContent()).append(System.lineSeparator());
         }
 
-        Section<ListSection> achievements = sections.get(SectionTitle.ACHIEVEMENT);
+        Section<ListSection> achievements = sections.get(SectionType.ACHIEVEMENT);
         if (achievements != null) {
-            answer.append(SectionTitle.ACHIEVEMENT.getTitle()).append(":").append(System.lineSeparator());
+            answer.append(SectionType.ACHIEVEMENT.getTitle()).append(":").append(System.lineSeparator());
             for (String achievement : (List<String>) achievements.getContent()) {
                 answer.append(achievement).append(System.lineSeparator());
             }
         }
 
-        Section<ListSection> qualifications = sections.get(SectionTitle.QUALIFICATIONS);
+        Section<ListSection> qualifications = sections.get(SectionType.QUALIFICATIONS);
         if (qualifications != null) {
-            answer.append(SectionTitle.QUALIFICATIONS.getTitle()).append(":").append(System.lineSeparator());
+            answer.append(SectionType.QUALIFICATIONS.getTitle()).append(":").append(System.lineSeparator());
             for (String qualification : (List<String>) qualifications.getContent()) {
                 answer.append(qualification).append(System.lineSeparator());
             }
         }
 
 
-        Section<OrganizationSection> experiences = sections.get(SectionTitle.EXPERIENCE);
+        Section<OrganizationSection> experiences = sections.get(SectionType.EXPERIENCE);
         if (experiences != null) {
-            answer.append(SectionTitle.EXPERIENCE.getTitle()).append(":").append(System.lineSeparator());
+            answer.append(SectionType.EXPERIENCE.getTitle()).append(":").append(System.lineSeparator());
             for (Organization experience : (List<Organization>) experiences.getContent()) {
-                DateFormat form = new SimpleDateFormat("MM/yyyy");
-                answer.append(experience.getName()).append(System.lineSeparator())
-                        .append(form.format(experience.getStartDate())).append(" - ")
-                        .append(form.format(experience.getFinishDate())).append("   ")
+                answer.append(experience.getOrganization().getName()).append(System.lineSeparator())
+                        .append(experience.getStartDate().toString()).append(" - ")
+                        .append(experience.getFinishDate().toString()).append("   ")
                         .append(experience.getTextTitle()).append(System.lineSeparator())
                         .append(experience.getText()).append(System.lineSeparator());
             }
         }
 
-        Section<OrganizationSection> education = sections.get(SectionTitle.EDUCATION);
+        Section<OrganizationSection> education = sections.get(SectionType.EDUCATION);
         if (education != null) {
-            answer.append(SectionTitle.EDUCATION.getTitle()).append(":").append(System.lineSeparator());
+            answer.append(SectionType.EDUCATION.getTitle()).append(":").append(System.lineSeparator());
             for (Organization educ : (List<Organization>) education.getContent()) {
-                DateFormat form = new SimpleDateFormat("MM/yyyy");
-                answer.append(educ.getName()).append(System.lineSeparator())
-                        .append(form.format(educ.getStartDate())).append(" - ")
-                        .append(form.format(educ.getFinishDate())).append("   ")
+                answer.append(educ.getOrganization().getName()).append(System.lineSeparator())
+                        .append(educ.getStartDate()).append(" - ")
+                        .append(educ.getFinishDate()).append("   ")
                         .append(educ.getTextTitle()).append(System.lineSeparator())
                         .append(educ.getText()).append(System.lineSeparator());
             }

@@ -1,31 +1,35 @@
 package ru.javawebinar.basejava.model;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.Objects;
 
 public class Organization {
-    private String name;
-    private Date startDate;
-    private Date finishDate;
-    private String textTitle;
-    private String text;
+    private final Link organization;
+    private final LocalDate startDate;
+    private final LocalDate finishDate;
+    private final String textTitle;
+    private final String text;
 
-    public Organization(String name, Date startDate, Date finishDate, String textTitle, String text) {
-        this.name = name;
+    public Organization(String name, String url, LocalDate startDate, LocalDate finishDate, String textTitle, String text) {
+        Objects.requireNonNull(startDate, "startDate mustn't be null");
+        Objects.requireNonNull(finishDate, "finishDate mustn't be null");
+        Objects.requireNonNull(textTitle, "textTitle mustn't be null");
+        this.organization = new Link(name, url);
         this.startDate = startDate;
         this.finishDate = finishDate;
         this.textTitle = textTitle;
         this.text = text;
     }
 
-    public String getName() {
-        return name;
+    public Link getOrganization() {
+        return organization;
     }
 
-    public Date getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public Date getFinishDate() {
+    public LocalDate getFinishDate() {
         return finishDate;
     }
 
@@ -35,5 +39,39 @@ public class Organization {
 
     public String getText() {
         return text;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Organization that = (Organization) o;
+
+        if (!organization.equals(that.organization)) return false;
+        if (!startDate.equals(that.startDate)) return false;
+        if (!finishDate.equals(that.finishDate)) return false;
+        return textTitle.equals(that.textTitle) && (text != null ? text.equals(that.text) : that.text == null);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = organization.hashCode();
+        result = 31 * result + startDate.hashCode();
+        result = 31 * result + finishDate.hashCode();
+        result = 31 * result + textTitle.hashCode();
+        result = 31 * result + (text != null ? text.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Organization{" +
+                "organization='" + organization + '\'' +
+                ", startDate=" + startDate +
+                ", finishDate=" + finishDate +
+                ", textTitle='" + textTitle + '\'' +
+                ", text='" + text + '\'' +
+                '}';
     }
 }

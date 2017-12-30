@@ -29,7 +29,7 @@ public class MapUuidStorage extends AbstractStorage<String> {
 
     @Override
     protected boolean isExist(String searchKey) {
-        return storage.containsKey( searchKey);
+        return storage.containsKey(searchKey);
     }
 
     @Override

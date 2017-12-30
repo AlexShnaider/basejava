@@ -1,15 +1,15 @@
 package ru.javawebinar.basejava.model;
 
-public enum SectionTitle {
+public enum SectionType {
     PERSONAL("Personal qualities"),
     OBJECTIVE("Position"),
     ACHIEVEMENT("Achievements"),
     QUALIFICATIONS("Qualifications"),
     EXPERIENCE("Work experience"),
     EDUCATION("Education");
-    String title;
+    final String title;
 
-    SectionTitle(String title) {
+    SectionType(String title) {
         this.title = title;
     }
 
