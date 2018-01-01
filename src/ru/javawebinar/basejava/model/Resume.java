@@ -22,6 +22,10 @@ public class Resume implements Comparable<Resume> {
         this.fullName = fullName;
     }
 
+    public void addContact(ContactType contact, String id) {
+        contacts.put(contact, id);
+    }
+
     public void addSection(SectionType name, Section section) {
         sections.put(name, section);
     }

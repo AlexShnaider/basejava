@@ -5,8 +5,10 @@ import org.junit.Before;
 import org.junit.Test;
 import ru.javawebinar.basejava.Exceptions.ExistStorageException;
 import ru.javawebinar.basejava.Exceptions.NotExistStorageException;
-import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.model.*;
 
+import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 
 public abstract class AbstractStorageTest {
@@ -18,15 +20,47 @@ public abstract class AbstractStorageTest {
     protected static final String NAME_2 = "Boris";
     protected static final String NAME_3 = "Viktor";
     protected static final String NAME_4 = "Grigory";
-    protected static final Resume RESUME1 = new Resume(UUID_1,NAME_1);
-    protected static final Resume RESUME2 = new Resume(UUID_2,NAME_2);
-    protected static final Resume RESUME3 = new Resume(UUID_3,NAME_3);
-    protected static final Resume RESUME4 = new Resume(UUID_4,NAME_4);
+    protected static final Resume RESUME1;
+    protected static final Resume RESUME2;
+    protected static final Resume RESUME3;
+    protected static final Resume RESUME4;
 
     protected final Storage storage;
 
+    static {
+        RESUME1 = new Resume(UUID_1, NAME_1);
+        fillResume(RESUME1);
+        RESUME2 = new Resume(UUID_2, NAME_2);
+        fillResume(RESUME2);
+        RESUME3 = new Resume(UUID_3, NAME_3);
+        fillResume(RESUME3);
+        RESUME4 = new Resume(UUID_4, NAME_4);
+        fillResume(RESUME4);
+    }
+
     protected AbstractStorageTest(Storage storage) {
         this.storage = storage;
+    }
+
+    private static void fillResume(Resume resume) {
+        resume.addContact(ContactType.PHONE, "985-123-45-67");
+        resume.addContact(ContactType.MAIL, "Some.email@gmail.com");
+        resume.addContact(ContactType.SKYPE, "SomeSkypeId");
+        TextSection personalSection = new TextSection("quality1, quality2, quality3");
+        resume.addSection(SectionType.PERSONAL, personalSection);
+        ListSection achievementSection = new ListSection(Arrays.asList("achievement1", "achievement2", "achievement3"));
+        resume.addSection(SectionType.ACHIEVEMENT, achievementSection);
+        List<LocalDate> date = Arrays.asList(LocalDate.of(2007, 12, 1));
+        List<String> organizationTitle = Arrays.asList("organizationTitle");
+        List<String> organizationText = Arrays.asList("organizationText");
+        Organization organization1 = new Organization("company1", null, date, date, organizationTitle, organizationText);
+        Organization organization2 = new Organization("company2", null, date, date, organizationTitle, organizationText);
+        OrganizationSection experienceSection = new OrganizationSection(Arrays.asList(organization1, organization2));
+        resume.addSection(SectionType.EXPERIENCE, experienceSection);
+        Organization university1 = new Organization("university1", null, date, date, organizationTitle, null);
+        Organization university2 = new Organization("university2", null, date, date, organizationTitle, null);
+        OrganizationSection educationSection = new OrganizationSection(Arrays.asList(university1, university2));
+        resume.addSection(SectionType.EDUCATION, educationSection);
     }
 
     @Before

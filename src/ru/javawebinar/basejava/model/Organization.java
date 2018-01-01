@@ -1,16 +1,18 @@
 package ru.javawebinar.basejava.model;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 public class Organization {
     private final Link organization;
-    private final LocalDate startDate;
-    private final LocalDate finishDate;
-    private final String textTitle;
-    private final String text;
+    private final List<LocalDate> startDate;
+    private final List<LocalDate> finishDate;
+    private final List<String> textTitle;
+    private final List<String> text;
 
-    public Organization(String name, String url, LocalDate startDate, LocalDate finishDate, String textTitle, String text) {
+    public Organization(String name, String url, List<LocalDate> startDate, List<LocalDate> finishDate
+            , List<String> textTitle, List<String> text) {
         Objects.requireNonNull(startDate, "startDate mustn't be null");
         Objects.requireNonNull(finishDate, "finishDate mustn't be null");
         Objects.requireNonNull(textTitle, "textTitle mustn't be null");
@@ -25,19 +27,19 @@ public class Organization {
         return organization;
     }
 
-    public LocalDate getStartDate() {
+    public List<LocalDate> getStartDate() {
         return startDate;
     }
 
-    public LocalDate getFinishDate() {
+    public List<LocalDate> getFinishDate() {
         return finishDate;
     }
 
-    public String getTextTitle() {
+    public List<String> getTextTitle() {
         return textTitle;
     }
 
-    public String getText() {
+    public List<String> getText() {
         return text;
     }
 
@@ -51,7 +53,8 @@ public class Organization {
         if (!organization.equals(that.organization)) return false;
         if (!startDate.equals(that.startDate)) return false;
         if (!finishDate.equals(that.finishDate)) return false;
-        return textTitle.equals(that.textTitle) && (text != null ? text.equals(that.text) : that.text == null);
+        if (!textTitle.equals(that.textTitle)) return false;
+        return text != null ? text.equals(that.text) : that.text == null;
     }
 
     @Override
@@ -67,11 +70,11 @@ public class Organization {
     @Override
     public String toString() {
         return "Organization{" +
-                "organization='" + organization + '\'' +
-                ", startDate=" + startDate +
-                ", finishDate=" + finishDate +
-                ", textTitle='" + textTitle + '\'' +
-                ", text='" + text + '\'' +
+                "organization=" + organization +
+                ", startDate=" + startDate.toString() +
+                ", finishDate=" + finishDate.toString() +
+                ", textTitle=" + textTitle.toString() +
+                ", text=" + text +
                 '}';
     }
 }

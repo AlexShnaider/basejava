@@ -11,10 +11,11 @@ public class MainResume {
         List<String> achievements = Arrays.asList("achievement1", "achievement2", "achievement3");
         ListSection achievementSection = new ListSection(achievements);
         Resume resume = new Resume("Alex");
-        LocalDate date = LocalDate.of(2007, 12, 1);
-
-        Organization organization1 = new Organization("company1", null, date, date, "jobTitle1", "some text1");
-        Organization organization2 = new Organization("company2", null, date, date, "jobTitle2", "some text2");
+        List<LocalDate> date = Arrays.asList(LocalDate.of(2007, 12, 1));
+        List<String> organizationTitle = Arrays.asList("organizationTitle");
+        List<String> organizationText = Arrays.asList("organizationText");
+        Organization organization1 = new Organization("company1", null, date, date, organizationTitle, organizationText);
+        Organization organization2 = new Organization("company2", null, date, date, organizationTitle, organizationText);
         List<Organization> organizations = Arrays.asList(organization1, organization2);
         OrganizationSection experienceSection = new OrganizationSection(organizations);
         resume.addSection(SectionType.PERSONAL, personalSection);
