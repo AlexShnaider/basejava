@@ -1,46 +1,22 @@
 package ru.javawebinar.basejava.model;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 
 public class Organization {
     private final Link organization;
-    private final List<LocalDate> startDate;
-    private final List<LocalDate> finishDate;
-    private final List<String> textTitle;
-    private final List<String> text;
+    private final List<Position> positions;
 
-    public Organization(String name, String url, List<LocalDate> startDate, List<LocalDate> finishDate
-            , List<String> textTitle, List<String> text) {
-        Objects.requireNonNull(startDate, "startDate mustn't be null");
-        Objects.requireNonNull(finishDate, "finishDate mustn't be null");
-        Objects.requireNonNull(textTitle, "textTitle mustn't be null");
+    public Organization(String name, String url, List<Position> positions) {
         this.organization = new Link(name, url);
-        this.startDate = startDate;
-        this.finishDate = finishDate;
-        this.textTitle = textTitle;
-        this.text = text;
+        this.positions = positions;
     }
 
     public Link getOrganization() {
         return organization;
     }
 
-    public List<LocalDate> getStartDate() {
-        return startDate;
-    }
-
-    public List<LocalDate> getFinishDate() {
-        return finishDate;
-    }
-
-    public List<String> getTextTitle() {
-        return textTitle;
-    }
-
-    public List<String> getText() {
-        return text;
+    public List<Position> getPositions() {
+        return positions;
     }
 
     @Override
@@ -51,19 +27,13 @@ public class Organization {
         Organization that = (Organization) o;
 
         if (!organization.equals(that.organization)) return false;
-        if (!startDate.equals(that.startDate)) return false;
-        if (!finishDate.equals(that.finishDate)) return false;
-        if (!textTitle.equals(that.textTitle)) return false;
-        return text != null ? text.equals(that.text) : that.text == null;
+        return positions.equals(that.positions);
     }
 
     @Override
     public int hashCode() {
         int result = organization.hashCode();
-        result = 31 * result + startDate.hashCode();
-        result = 31 * result + finishDate.hashCode();
-        result = 31 * result + textTitle.hashCode();
-        result = 31 * result + (text != null ? text.hashCode() : 0);
+        result = 31 * result + positions.hashCode();
         return result;
     }
 
@@ -71,10 +41,7 @@ public class Organization {
     public String toString() {
         return "Organization{" +
                 "organization=" + organization +
-                ", startDate=" + startDate.toString() +
-                ", finishDate=" + finishDate.toString() +
-                ", textTitle=" + textTitle.toString() +
-                ", text=" + text +
+                ", positions=" + positions +
                 '}';
     }
 }

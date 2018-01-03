@@ -83,11 +83,13 @@ public class Resume implements Comparable<Resume> {
         if (experiences != null) {
             answer.append(SectionType.EXPERIENCE.getTitle()).append(":").append(System.lineSeparator());
             for (Organization experience : (List<Organization>) experiences.getContent()) {
-                answer.append(experience.getOrganization().getName()).append(System.lineSeparator())
-                        .append(experience.getStartDate().toString()).append(" - ")
-                        .append(experience.getFinishDate().toString()).append("   ")
-                        .append(experience.getTextTitle()).append(System.lineSeparator())
-                        .append(experience.getText()).append(System.lineSeparator());
+                answer.append(experience.getOrganization().getName()).append(System.lineSeparator());
+                for (Position pos : experience.getPositions()) {
+                    answer.append(pos.getStartDate().toString()).append(" - ")
+                            .append(pos.getFinishDate().toString()).append("   ")
+                            .append(pos.getTextTitle()).append(System.lineSeparator())
+                            .append(pos.getText()).append(System.lineSeparator());
+                }
             }
         }
 
@@ -95,11 +97,13 @@ public class Resume implements Comparable<Resume> {
         if (education != null) {
             answer.append(SectionType.EDUCATION.getTitle()).append(":").append(System.lineSeparator());
             for (Organization educ : (List<Organization>) education.getContent()) {
-                answer.append(educ.getOrganization().getName()).append(System.lineSeparator())
-                        .append(educ.getStartDate()).append(" - ")
-                        .append(educ.getFinishDate()).append("   ")
-                        .append(educ.getTextTitle()).append(System.lineSeparator())
-                        .append(educ.getText()).append(System.lineSeparator());
+                answer.append(educ.getOrganization().getName()).append(System.lineSeparator());
+                for (Position pos : educ.getPositions()) {
+                    answer.append(pos.getStartDate().toString()).append(" - ")
+                            .append(pos.getFinishDate().toString()).append("   ")
+                            .append(pos.getTextTitle()).append(System.lineSeparator())
+                            .append(pos.getText()).append(System.lineSeparator());
+                }
             }
         }
 

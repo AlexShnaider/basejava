@@ -50,15 +50,16 @@ public abstract class AbstractStorageTest {
         resume.addSection(SectionType.PERSONAL, personalSection);
         ListSection achievementSection = new ListSection(Arrays.asList("achievement1", "achievement2", "achievement3"));
         resume.addSection(SectionType.ACHIEVEMENT, achievementSection);
-        List<LocalDate> date = Arrays.asList(LocalDate.of(2007, 12, 1));
-        List<String> organizationTitle = Arrays.asList("organizationTitle");
-        List<String> organizationText = Arrays.asList("organizationText");
-        Organization organization1 = new Organization("company1", null, date, date, organizationTitle, organizationText);
-        Organization organization2 = new Organization("company2", null, date, date, organizationTitle, organizationText);
+        LocalDate date = LocalDate.of(2007, 12, 1);
+        String organizationTitle = "organizationTitle";
+        String organizationText = "organizationText";
+        List<Position> positions = Arrays.asList(new Position(date, date, organizationTitle, organizationText));
+        Organization organization1 = new Organization("company1", null, positions);
+        Organization organization2 = new Organization("company2", null, positions);
         OrganizationSection experienceSection = new OrganizationSection(Arrays.asList(organization1, organization2));
         resume.addSection(SectionType.EXPERIENCE, experienceSection);
-        Organization university1 = new Organization("university1", null, date, date, organizationTitle, null);
-        Organization university2 = new Organization("university2", null, date, date, organizationTitle, null);
+        Organization university1 = new Organization("university1", null, positions);
+        Organization university2 = new Organization("university2", null, positions);
         OrganizationSection educationSection = new OrganizationSection(Arrays.asList(university1, university2));
         resume.addSection(SectionType.EDUCATION, educationSection);
     }

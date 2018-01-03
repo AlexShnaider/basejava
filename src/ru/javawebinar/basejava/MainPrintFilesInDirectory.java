@@ -10,12 +10,13 @@ public class MainPrintFilesInDirectory {
 
     public static void printFilesInDirectory(String directory) {
         File dir = new File(directory);
-        for (String file : dir.list()) {
-            String possibleDirPath = directory + '/' + file;
-            if (new File(possibleDirPath).isDirectory()) {
-                printFilesInDirectory(possibleDirPath);
-            } else {
-                System.out.println(file);
+        if (dir.isDirectory()) {
+            for (File file : dir.listFiles()) {
+                if (file.isDirectory()) {
+                    printFilesInDirectory(file.getPath());
+                } else {
+                    System.out.println(file.getName());
+                }
             }
         }
     }
