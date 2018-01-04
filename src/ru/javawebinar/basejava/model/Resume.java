@@ -84,7 +84,7 @@ public class Resume implements Comparable<Resume> {
             answer.append(SectionType.EXPERIENCE.getTitle()).append(":").append(System.lineSeparator());
             for (Organization experience : (List<Organization>) experiences.getContent()) {
                 answer.append(experience.getOrganization().getName()).append(System.lineSeparator());
-                for (Position pos : experience.getPositions()) {
+                for (Organization.Position pos : experience.getPositions()) {
                     answer.append(pos.getStartDate().toString()).append(" - ")
                             .append(pos.getFinishDate().toString()).append("   ")
                             .append(pos.getTextTitle()).append(System.lineSeparator())
@@ -98,7 +98,7 @@ public class Resume implements Comparable<Resume> {
             answer.append(SectionType.EDUCATION.getTitle()).append(":").append(System.lineSeparator());
             for (Organization educ : (List<Organization>) education.getContent()) {
                 answer.append(educ.getOrganization().getName()).append(System.lineSeparator());
-                for (Position pos : educ.getPositions()) {
+                for (Organization.Position pos : educ.getPositions()) {
                     answer.append(pos.getStartDate().toString()).append(" - ")
                             .append(pos.getFinishDate().toString()).append("   ")
                             .append(pos.getTextTitle()).append(System.lineSeparator())

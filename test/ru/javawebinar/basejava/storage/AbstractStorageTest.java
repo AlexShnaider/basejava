@@ -53,7 +53,7 @@ public abstract class AbstractStorageTest {
         LocalDate date = LocalDate.of(2007, 12, 1);
         String organizationTitle = "organizationTitle";
         String organizationText = "organizationText";
-        List<Position> positions = Arrays.asList(new Position(date, date, organizationTitle, organizationText));
+        List<Organization.Position> positions = Arrays.asList(new Organization.Position(date, date, organizationTitle, organizationText));
         Organization organization1 = new Organization("company1", null, positions);
         Organization organization2 = new Organization("company2", null, positions);
         OrganizationSection experienceSection = new OrganizationSection(Arrays.asList(organization1, organization2));

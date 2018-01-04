@@ -14,18 +14,13 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     private File directory;
 
     protected AbstractFileStorage(File directory) {
-        Objects.requireNonNull(directory, "directory mustn't be null");
-        if (!directory.isDirectory()) {
-            throw new IllegalArgumentException(directory.getAbsolutePath() + "is not directory");
-        }
-        if (!directory.canRead() || !directory.canWrite()) {
-            throw new IllegalArgumentException(directory.getAbsolutePath() + "is not readable/writable");
-        }
+        checkDirectory(directory);
         this.directory = directory;
     }
 
     @Override
     protected List<Resume> getAllAsList() {
+        checkDirectory(directory);
         List<Resume> answer = new ArrayList<>();
         for (File file : directory.listFiles()) {
             try {
@@ -84,6 +79,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     public void clear() {
+        checkDirectory(directory);
         for (File file : directory.listFiles()) {
             doDelete(file);
         }
@@ -91,7 +87,18 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     public int size() {
+        checkDirectory(directory);
         return directory.listFiles().length;
+    }
+
+    private void checkDirectory(File directory) {
+        Objects.requireNonNull(directory, "directory mustn't be null");
+        if (!directory.isDirectory()) {
+            throw new IllegalArgumentException(directory.getAbsolutePath() + "is not directory");
+        }
+        if (!directory.canRead() || !directory.canWrite()) {
+            throw new IllegalArgumentException(directory.getAbsolutePath() + "is not readable/writable");
+        }
     }
 
     protected abstract void doWrite(Resume r, File file) throws IOException;

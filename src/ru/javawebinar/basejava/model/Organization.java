@@ -1,6 +1,8 @@
 package ru.javawebinar.basejava.model;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 public class Organization {
     private final Link organization;
@@ -43,5 +45,38 @@ public class Organization {
                 "organization=" + organization +
                 ", positions=" + positions +
                 '}';
+    }
+
+    public static class Position {
+        private final LocalDate startDate;
+        private final LocalDate finishDate;
+        private final String textTitle;
+        private final String text;
+
+        public Position(LocalDate startDate, LocalDate finishDate, String textTitle, String text) {
+            Objects.requireNonNull(startDate, "startDate mustn't be null");
+            Objects.requireNonNull(finishDate, "finishDate mustn't be null");
+            Objects.requireNonNull(textTitle, "textTitle mustn't be null");
+            this.startDate = startDate;
+            this.finishDate = finishDate;
+            this.textTitle = textTitle;
+            this.text = text;
+        }
+
+        public LocalDate getStartDate() {
+            return startDate;
+        }
+
+        public LocalDate getFinishDate() {
+            return finishDate;
+        }
+
+        public String getTextTitle() {
+            return textTitle;
+        }
+
+        public String getText() {
+            return text;
+        }
     }
 }
