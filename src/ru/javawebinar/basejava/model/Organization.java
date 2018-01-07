@@ -1,10 +1,11 @@
 package ru.javawebinar.basejava.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
-public class Organization {
+public class Organization implements Serializable {
     private final Link organization;
     private final List<Position> positions;
 
@@ -47,7 +48,7 @@ public class Organization {
                 '}';
     }
 
-    public static class Position {
+    public static class Position implements Serializable {
         private final LocalDate startDate;
         private final LocalDate finishDate;
         private final String textTitle;

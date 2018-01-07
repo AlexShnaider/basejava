@@ -4,18 +4,19 @@ import java.io.File;
 
 public class MainPrintFilesInDirectory {
     public static void main(String[] args) {
-        printFilesInDirectory("./src");
-        printFilesInDirectory("./test");
+        printFilesInDirectory("./src", 1);
+        printFilesInDirectory("./test", 1);
     }
 
-    public static void printFilesInDirectory(String directory) {
+    public static void printFilesInDirectory(String directory, int spaces) {
         File dir = new File(directory);
         if (dir.isDirectory()) {
             for (File file : dir.listFiles()) {
                 if (file.isDirectory()) {
-                    printFilesInDirectory(file.getPath());
+                    System.out.println(String.format("%" + spaces + "s", "") + file.getName());
+                    printFilesInDirectory(file.getPath(), spaces + 2);
                 } else {
-                    System.out.println(file.getName());
+                    System.out.println(String.format("%" + spaces + "s", "") + file.getName());
                 }
             }
         }
