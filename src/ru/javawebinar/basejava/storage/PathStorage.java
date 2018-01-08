@@ -2,6 +2,7 @@ package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.Exceptions.StorageException;
 import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.Strategy.SerializationStrategy;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -11,12 +12,12 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class PathStrategy implements DirectoryStrategy<Path> {
+public class PathStorage extends AbstractStorage<Path> {
 
     private Path directory;
     private final SerializationStrategy strategy;
 
-    protected PathStrategy(String directory, SerializationStrategy strategy) {
+    protected PathStorage(String directory, SerializationStrategy strategy) {
         this.directory = Paths.get(directory);
         this.strategy = strategy;
         checkDirectory(this.directory);
@@ -33,7 +34,7 @@ public class PathStrategy implements DirectoryStrategy<Path> {
     }
 
     @Override
-    public List<Resume> getAllAsList() {
+    protected List<Resume> getAllAsList() {
         try {
             Stream<Path> paths = Files.list(directory);
             List<Resume> answer = new ArrayList<>();
@@ -47,7 +48,7 @@ public class PathStrategy implements DirectoryStrategy<Path> {
     }
 
     @Override
-    public void doSave(Resume r, Path path) {
+    protected void doSave(Resume r, Path path) {
         try {
             Files.createFile(path);
         } catch (IOException e) {
@@ -57,7 +58,7 @@ public class PathStrategy implements DirectoryStrategy<Path> {
     }
 
     @Override
-    public void doUpdate(Resume r, Path path) {
+    protected void doUpdate(Resume r, Path path) {
         try {
             strategy.doWrite(r, new BufferedOutputStream(Files.newOutputStream(path)));
         } catch (IOException e) {
@@ -66,7 +67,7 @@ public class PathStrategy implements DirectoryStrategy<Path> {
     }
 
     @Override
-    public Resume doGet(Path path) {
+    protected Resume doGet(Path path) {
         try {
             return strategy.doRead(new BufferedInputStream(Files.newInputStream(path)));
         } catch (IOException e) {
@@ -75,7 +76,7 @@ public class PathStrategy implements DirectoryStrategy<Path> {
     }
 
     @Override
-    public void doDelete(Path path) {
+    protected void doDelete(Path path) {
         try {
             Files.delete(path);
         } catch (IOException e) {
@@ -84,12 +85,12 @@ public class PathStrategy implements DirectoryStrategy<Path> {
     }
 
     @Override
-    public boolean isExist(Path path) {
+    protected boolean isExist(Path path) {
         return Files.exists(path);
     }
 
     @Override
-    public Path getSearchKey(String uuid) {
+    protected Path getSearchKey(String uuid) {
         return directory.resolve(uuid);
     }
 
