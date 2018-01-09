@@ -35,11 +35,7 @@ public class FileStorage extends AbstractStorage<File> {
         checkDirectory(directory);
         List<Resume> answer = new ArrayList<>();
         for (File file : directory.listFiles()) {
-            try {
-                answer.add(strategy.doRead(new BufferedInputStream(new FileInputStream(file))));
-            } catch (IOException e) {
-                throw new StorageException("IO Exception", file.getName(), e);
-            }
+            answer.add(doGet(file));
         }
         return answer;
     }

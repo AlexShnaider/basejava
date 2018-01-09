@@ -10,7 +10,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class PathStorage extends AbstractStorage<Path> {
 
@@ -36,12 +35,7 @@ public class PathStorage extends AbstractStorage<Path> {
     @Override
     protected List<Resume> getAllAsList() {
         try {
-            Stream<Path> paths = Files.list(directory);
-            List<Resume> answer = new ArrayList<>();
-            for (Path path : paths.collect(Collectors.toList())) {
-                answer.add(doGet(path));
-            }
-            return answer;
+            return Files.list(directory).map(this::doGet).collect(Collectors.toList());
         } catch (IOException e) {
             throw new StorageException("IO Exception", null, e);
         }
