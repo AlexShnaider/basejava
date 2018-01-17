@@ -2,7 +2,7 @@ package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.Exceptions.StorageException;
 import ru.javawebinar.basejava.model.Resume;
-import ru.javawebinar.basejava.Strategy.SerializationStrategy;
+import ru.javawebinar.basejava.storage.Serializer.SerializationStrategy;
 
 import java.io.*;
 import java.util.ArrayList;

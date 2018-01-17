@@ -1,13 +1,23 @@
 package ru.javawebinar.basejava.model;
 
+import ru.javawebinar.basejava.util.LocalDateXmlAdapter;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
+
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Organization implements Serializable {
-    private final Link organization;
-    private final List<Position> positions;
+    private Link organization;
+    private List<Position> positions;
+
+    public Organization() {
+    }
 
     public Organization(String name, String url, List<Position> positions) {
         this.organization = new Link(name, url);
@@ -48,11 +58,20 @@ public class Organization implements Serializable {
                 '}';
     }
 
+    @XmlAccessorType(XmlAccessType.FIELD)
     public static class Position implements Serializable {
-        private final LocalDate startDate;
-        private final LocalDate finishDate;
-        private final String textTitle;
-        private final String text;
+
+        @XmlJavaTypeAdapter(LocalDateXmlAdapter.class)
+        private LocalDate startDate;
+
+        @XmlJavaTypeAdapter(LocalDateXmlAdapter.class)
+        private LocalDate finishDate;
+
+        private String textTitle;
+        private String text;
+
+        public Position() {
+        }
 
         public Position(LocalDate startDate, LocalDate finishDate, String textTitle, String text) {
             Objects.requireNonNull(startDate, "startDate mustn't be null");
@@ -62,6 +81,23 @@ public class Organization implements Serializable {
             this.finishDate = finishDate;
             this.textTitle = textTitle;
             this.text = text;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Position position = (Position) o;
+            return Objects.equals(startDate, position.startDate) &&
+                    Objects.equals(finishDate, position.finishDate) &&
+                    Objects.equals(textTitle, position.textTitle) &&
+                    Objects.equals(text, position.text);
+        }
+
+        @Override
+        public int hashCode() {
+
+            return Objects.hash(startDate, finishDate, textTitle, text);
         }
 
         public LocalDate getStartDate() {

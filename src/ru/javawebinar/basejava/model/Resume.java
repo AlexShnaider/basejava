@@ -1,16 +1,24 @@
 package ru.javawebinar.basejava.model;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.*;
 
 /**
  * com.urise.webapp.model.Resume class
  */
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Resume implements Comparable<Resume>, Serializable {
-    private final String uuid;
-    private final String fullName;
+    private String uuid;
+    private String fullName;
     private final Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
     private final Map<SectionType, Section> sections = new EnumMap<>(SectionType.class);
+
+    public Resume() {
+    }
 
     public Resume(String fullName) {
         this(UUID.randomUUID().toString(), fullName);
@@ -41,91 +49,23 @@ public class Resume implements Comparable<Resume>, Serializable {
 
     @Override
     public String toString() {
-        StringBuilder answer = new StringBuilder();
-        answer.append(fullName).append(System.lineSeparator());
-
-        if (!contacts.isEmpty()) {
-            answer.append("Contacts :").append(System.lineSeparator());
-            for (Map.Entry entry : contacts.entrySet()) {
-                answer.append(entry.getKey()).append(" : ").append(entry.getValue()).append(System.lineSeparator());
-            }
-        }
-
-        Section<TextSection> position = sections.get(SectionType.OBJECTIVE);
-        if (position != null) {
-            answer.append(SectionType.OBJECTIVE.getTitle()).append(":").append(System.lineSeparator())
-                    .append(position.getContent()).append(System.lineSeparator());
-        }
-
-        Section<TextSection> qualities = sections.get(SectionType.PERSONAL);
-        if (qualities != null) {
-            answer.append(SectionType.PERSONAL.getTitle()).append(":").append(System.lineSeparator())
-                    .append(qualities.getContent()).append(System.lineSeparator());
-        }
-
-        Section<ListSection> achievements = sections.get(SectionType.ACHIEVEMENT);
-        if (achievements != null) {
-            answer.append(SectionType.ACHIEVEMENT.getTitle()).append(":").append(System.lineSeparator());
-            for (String achievement : (List<String>) achievements.getContent()) {
-                answer.append(achievement).append(System.lineSeparator());
-            }
-        }
-
-        Section<ListSection> qualifications = sections.get(SectionType.QUALIFICATIONS);
-        if (qualifications != null) {
-            answer.append(SectionType.QUALIFICATIONS.getTitle()).append(":").append(System.lineSeparator());
-            for (String qualification : (List<String>) qualifications.getContent()) {
-                answer.append(qualification).append(System.lineSeparator());
-            }
-        }
-
-
-        Section<OrganizationSection> experiences = sections.get(SectionType.EXPERIENCE);
-        if (experiences != null) {
-            answer.append(SectionType.EXPERIENCE.getTitle()).append(":").append(System.lineSeparator());
-            for (Organization experience : (List<Organization>) experiences.getContent()) {
-                answer.append(experience.getOrganization().getName()).append(System.lineSeparator());
-                for (Organization.Position pos : experience.getPositions()) {
-                    answer.append(pos.getStartDate().toString()).append(" - ")
-                            .append(pos.getFinishDate().toString()).append("   ")
-                            .append(pos.getTextTitle()).append(System.lineSeparator())
-                            .append(pos.getText()).append(System.lineSeparator());
-                }
-            }
-        }
-
-        Section<OrganizationSection> education = sections.get(SectionType.EDUCATION);
-        if (education != null) {
-            answer.append(SectionType.EDUCATION.getTitle()).append(":").append(System.lineSeparator());
-            for (Organization educ : (List<Organization>) education.getContent()) {
-                answer.append(educ.getOrganization().getName()).append(System.lineSeparator());
-                for (Organization.Position pos : educ.getPositions()) {
-                    answer.append(pos.getStartDate().toString()).append(" - ")
-                            .append(pos.getFinishDate().toString()).append("   ")
-                            .append(pos.getTextTitle()).append(System.lineSeparator())
-                            .append(pos.getText()).append(System.lineSeparator());
-                }
-            }
-        }
-
-        return answer.toString();
+        return uuid + '(' + fullName + ')';
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Resume resume = (Resume) o;
-
-        return uuid.equals(resume.uuid) && fullName.equals(resume.fullName);
+        return Objects.equals(uuid, resume.uuid) &&
+                Objects.equals(fullName, resume.fullName) &&
+                Objects.equals(contacts, resume.contacts) &&
+                Objects.equals(sections, resume.sections);
     }
 
     @Override
     public int hashCode() {
-        int result = uuid.hashCode();
-        result = 31 * result + fullName.hashCode();
-        return result;
+        return Objects.hash(uuid, fullName, contacts, sections);
     }
 
     @Override
