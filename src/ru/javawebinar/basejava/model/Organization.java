@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -14,13 +15,19 @@ import java.util.Objects;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Organization implements Serializable {
     private Link organization;
-    private List<Position> positions;
+    private final List<Position> positions;
 
     public Organization() {
+        positions = new ArrayList<>();
     }
 
     public Organization(String name, String url, List<Position> positions) {
         this.organization = new Link(name, url);
+        this.positions = positions;
+    }
+
+    public Organization(Link organization, List<Position> positions) {
+        this.organization = organization;
         this.positions = positions;
     }
 
@@ -83,6 +90,22 @@ public class Organization implements Serializable {
             this.text = text;
         }
 
+        public LocalDate getStartDate() {
+            return startDate;
+        }
+
+        public LocalDate getFinishDate() {
+            return finishDate;
+        }
+
+        public String getTextTitle() {
+            return textTitle;
+        }
+
+        public String getText() {
+            return text;
+        }
+
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
@@ -98,22 +121,6 @@ public class Organization implements Serializable {
         public int hashCode() {
 
             return Objects.hash(startDate, finishDate, textTitle, text);
-        }
-
-        public LocalDate getStartDate() {
-            return startDate;
-        }
-
-        public LocalDate getFinishDate() {
-            return finishDate;
-        }
-
-        public String getTextTitle() {
-            return textTitle;
-        }
-
-        public String getText() {
-            return text;
         }
     }
 }

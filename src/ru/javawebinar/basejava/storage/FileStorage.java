@@ -11,7 +11,7 @@ import java.util.Objects;
 
 public class FileStorage extends AbstractStorage<File> {
 
-    private File directory;
+    private final File directory;
     private final SerializationStrategy strategy;
 
     protected FileStorage(File directory, SerializationStrategy strategy) {

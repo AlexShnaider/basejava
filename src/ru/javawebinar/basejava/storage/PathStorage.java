@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 public class PathStorage extends AbstractStorage<Path> {
 
-    private Path directory;
+    private final Path directory;
     private final SerializationStrategy strategy;
 
     protected PathStorage(String directory, SerializationStrategy strategy) {

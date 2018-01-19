@@ -1,9 +1,47 @@
 package ru.javawebinar.basejava.model;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-public class ListSection extends Section<List<String>> {
+public class ListSection extends Section {
+
+    private final List<String> lines;
+
+    public ListSection() {
+        lines = new ArrayList<>();
+    }
+
     public ListSection(List<String> lines) {
-        super(lines);
+        this.lines = lines;
+    }
+
+    public List<String> getLines() {
+        return lines;
+    }
+
+    public void addLine(String line) {
+        lines.add(line);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ListSection that = (ListSection) o;
+        return Objects.equals(lines, that.lines);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(lines);
+    }
+
+    @Override
+    public String toString() {
+        return "ListSection{" +
+                "lines=" + lines +
+                "} " + super.toString();
     }
 }
