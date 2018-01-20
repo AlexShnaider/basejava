@@ -61,8 +61,8 @@ public abstract class AbstractStorageTest {
         Organization organization2 = new Organization("company2", "", positions);
         OrganizationSection experienceSection = new OrganizationSection(Arrays.asList(organization1, organization2));
         resume.addSection(SectionType.EXPERIENCE, experienceSection);
-        Organization university1 = new Organization("university1", "", positions);
-        Organization university2 = new Organization("university2", "", positions);
+        Organization university1 = new Organization("university1", null, positions);
+        Organization university2 = new Organization("university2", null, positions);
         OrganizationSection educationSection = new OrganizationSection(Arrays.asList(university1, university2));
         resume.addSection(SectionType.EDUCATION, educationSection);
     }
