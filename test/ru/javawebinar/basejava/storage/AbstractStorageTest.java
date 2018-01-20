@@ -57,12 +57,12 @@ public abstract class AbstractStorageTest {
         String organizationTitle = "organizationTitle";
         String organizationText = "organizationText";
         List<Organization.Position> positions = Arrays.asList(new Organization.Position(date, date, organizationTitle, organizationText));
-        Organization organization1 = new Organization("company1", null, positions);
-        Organization organization2 = new Organization("company2", null, positions);
+        Organization organization1 = new Organization("company1", "", positions);
+        Organization organization2 = new Organization("company2", "", positions);
         OrganizationSection experienceSection = new OrganizationSection(Arrays.asList(organization1, organization2));
         resume.addSection(SectionType.EXPERIENCE, experienceSection);
-        Organization university1 = new Organization("university1", null, positions);
-        Organization university2 = new Organization("university2", null, positions);
+        Organization university1 = new Organization("university1", "", positions);
+        Organization university2 = new Organization("university2", "", positions);
         OrganizationSection educationSection = new OrganizationSection(Arrays.asList(university1, university2));
         resume.addSection(SectionType.EDUCATION, educationSection);
     }

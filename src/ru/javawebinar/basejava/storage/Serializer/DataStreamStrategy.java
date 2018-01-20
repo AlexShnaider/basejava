@@ -24,40 +24,37 @@ public class DataStreamStrategy implements SerializationStrategy {
             for (Map.Entry<SectionType, Section> section : resume.getSections().entrySet()) {
                 SectionType sectionType = section.getKey();
                 dos.writeUTF(sectionType.name());
-                if (sectionType == SectionType.PERSONAL || sectionType == SectionType.OBJECTIVE) {
-                    TextSection textSection = (TextSection) section.getValue();
-                    dos.writeUTF(textSection.getText());
-                } else if (sectionType == SectionType.ACHIEVEMENT || sectionType == SectionType.QUALIFICATIONS) {
-                    ListSection listSection = (ListSection) section.getValue();
-                    dos.writeInt(listSection.getLines().size());
-                    for (String line : listSection.getLines()) {
-                        dos.writeUTF(line);
-                    }
-                } else if (sectionType == SectionType.EXPERIENCE || sectionType == SectionType.EDUCATION) {
-                    OrganizationSection organizationSection = (OrganizationSection) section.getValue();
-                    dos.writeInt(organizationSection.getOrganizations().size());
-                    for (Organization organization : organizationSection.getOrganizations()) {
-                        Link link = organization.getOrganization();
-                        dos.writeUTF(link.getName());
-                        if (link.getUrl() == null) {
-                            dos.writeBoolean(false);
-                        } else {
-                            dos.writeBoolean(true);
-                            dos.writeUTF(link.getUrl());
+                switch (sectionType) {
+                    case PERSONAL:
+                    case OBJECTIVE:
+                        TextSection textSection = (TextSection) section.getValue();
+                        dos.writeUTF(textSection.getText());
+                        break;
+                    case ACHIEVEMENT:
+                    case QUALIFICATIONS:
+                        ListSection listSection = (ListSection) section.getValue();
+                        dos.writeInt(listSection.getLines().size());
+                        for (String line : listSection.getLines()) {
+                            dos.writeUTF(line);
                         }
-                        dos.writeInt(organization.getPositions().size());
-                        for (Organization.Position position : organization.getPositions()) {
-                            dos.writeUTF(position.getStartDate().toString());
-                            dos.writeUTF(position.getFinishDate().toString());
-                            dos.writeUTF(position.getTextTitle());
-                            if (position.getText() == null) {
-                                dos.writeBoolean(false);
-                            } else {
-                                dos.writeBoolean(true);
+                        break;
+                    case EXPERIENCE:
+                    case EDUCATION:
+                        OrganizationSection organizationSection = (OrganizationSection) section.getValue();
+                        dos.writeInt(organizationSection.getOrganizations().size());
+                        for (Organization organization : organizationSection.getOrganizations()) {
+                            Link link = organization.getOrganization();
+                            dos.writeUTF(link.getName());
+                            dos.writeUTF(link.getUrl());
+                            dos.writeInt(organization.getPositions().size());
+                            for (Organization.Position position : organization.getPositions()) {
+                                dos.writeUTF(position.getStartDate().toString());
+                                dos.writeUTF(position.getFinishDate().toString());
+                                dos.writeUTF(position.getTextTitle());
                                 dos.writeUTF(position.getText());
                             }
                         }
-                    }
+                        break;
                 }
             }
         }
@@ -74,32 +71,39 @@ public class DataStreamStrategy implements SerializationStrategy {
             int sectionsAmount = dis.readInt();
             for (int i = 0; i < sectionsAmount; i++) {
                 SectionType sectionType = SectionType.valueOf(dis.readUTF());
-                if (sectionType == SectionType.PERSONAL || sectionType == SectionType.OBJECTIVE) {
-                    resume.addSection(sectionType, new TextSection(dis.readUTF()));
-                } else if (sectionType == SectionType.ACHIEVEMENT || sectionType == SectionType.QUALIFICATIONS) {
-                    int numberLines = dis.readInt();
-                    ListSection listSection = new ListSection();
-                    for (int j = 0; j < numberLines; j++) {
-                        listSection.addLine(dis.readUTF());
-                    }
-                    resume.addSection(sectionType, listSection);
-                } else if (sectionType == SectionType.EXPERIENCE || sectionType == SectionType.EDUCATION) {
-                    int numberOrganizations = dis.readInt();
-                    OrganizationSection organizationSection = new OrganizationSection();
-                    for (int j = 0; j < numberOrganizations; j++) {
-                        Link link = new Link(dis.readUTF(), dis.readBoolean() ? dis.readUTF() : null);
-                        int positionsNumber = dis.readInt();
-                        List<Organization.Position> positions = new ArrayList<>();
-                        for (int k = 0; k < positionsNumber; k++) {
-                            LocalDate startDate = LocalDate.parse(dis.readUTF());
-                            LocalDate finishDate = LocalDate.parse(dis.readUTF());
-                            String textTitle = dis.readUTF();
-                            String text = dis.readBoolean() ? dis.readUTF() : null;
-                            positions.add(new Organization.Position(startDate, finishDate, textTitle, text));
+                switch (sectionType) {
+                    case PERSONAL:
+                    case OBJECTIVE:
+                        resume.addSection(sectionType, new TextSection(dis.readUTF()));
+                        break;
+                    case ACHIEVEMENT:
+                    case QUALIFICATIONS:
+                        int numberLines = dis.readInt();
+                        ListSection listSection = new ListSection();
+                        for (int j = 0; j < numberLines; j++) {
+                            listSection.addLine(dis.readUTF());
                         }
-                        organizationSection.addOrganization(new Organization(link, positions));
-                    }
-                    resume.addSection(sectionType, organizationSection);
+                        resume.addSection(sectionType, listSection);
+                        break;
+                    case EXPERIENCE:
+                    case EDUCATION:
+                        int numberOrganizations = dis.readInt();
+                        OrganizationSection organizationSection = new OrganizationSection();
+                        for (int j = 0; j < numberOrganizations; j++) {
+                            Link link = new Link(dis.readUTF(), dis.readUTF());
+                            int positionsNumber = dis.readInt();
+                            List<Organization.Position> positions = new ArrayList<>();
+                            for (int k = 0; k < positionsNumber; k++) {
+                                LocalDate startDate = LocalDate.parse(dis.readUTF());
+                                LocalDate finishDate = LocalDate.parse(dis.readUTF());
+                                String textTitle = dis.readUTF();
+                                String text = dis.readUTF();
+                                positions.add(new Organization.Position(startDate, finishDate, textTitle, text));
+                            }
+                            organizationSection.addOrganization(new Organization(link, positions));
+                        }
+                        resume.addSection(sectionType, organizationSection);
+                        break;
                 }
             }
             return resume;
