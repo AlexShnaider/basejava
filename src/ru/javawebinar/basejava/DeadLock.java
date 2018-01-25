@@ -1,37 +1,33 @@
 package ru.javawebinar.basejava;
 
 public class DeadLock {
-    private static final Object LOCK_0 = new Object();
-    private static final Object LOCK_1 = new Object();
+    private static final String LOCK_0 = new String("LOCK_0");
+    private static final String LOCK_1 = new String("LOCK_1");
 
     public static void main(String[] args) {
+        DeadLock deadLock = new DeadLock();
         Thread thread0 = new Thread(() -> {
-            synchronized (LOCK_0) {
-                System.out.println("First thread is started with LOCK_0. Waiting for LOCK_1");
-                try {
-                    Thread.sleep(300);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                synchronized (LOCK_1) {
-                    System.out.println("Thread is stuck");
-                }
-            }
+            deadLock.syncronizedMethod(LOCK_0,LOCK_1);
         });
         Thread thread1 = new Thread(() -> {
-            synchronized (LOCK_1) {
-                System.out.println("Second thread is started with LOCK_1. Waiting for LOCK_0");
-                try {
-                    Thread.sleep(300);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                synchronized (LOCK_0) {
-                    System.out.println("Thread is stuck");
-                }
-            }
+            deadLock.syncronizedMethod(LOCK_1,LOCK_0);
+
         });
         thread0.start();
         thread1.start();
+    }
+
+    private void syncronizedMethod(String lock0, String lock1) {
+        synchronized (lock0) {
+            System.out.println(Thread.currentThread().getName() + " is started with " + lock0 + ". Waiting for " + lock1);
+            try {
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            synchronized (lock1) {
+                System.out.println("Thread is stuck");
+            }
+        }
     }
 }
