@@ -4,8 +4,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import ru.javawebinar.basejava.Config;
+import ru.javawebinar.basejava.Exceptions.ExistStorageException;
 import ru.javawebinar.basejava.Exceptions.NotExistStorageException;
-import ru.javawebinar.basejava.Exceptions.StorageException;
 import ru.javawebinar.basejava.model.*;
 
 import java.io.File;
@@ -93,7 +93,7 @@ public abstract class AbstractStorageTest {
         Assert.assertEquals(a1, a2);
     }
 
-    @Test(expected = StorageException.class)
+    @Test(expected = ExistStorageException.class)
     public void saveAlreadyExistedUuid() throws Exception {
         Assert.assertEquals(3, storage.size());
         storage.save(RESUME1);
@@ -106,11 +106,11 @@ public abstract class AbstractStorageTest {
         Assert.assertEquals(3, storage.size());
     }
 
-/*    @Test(expected = NotExistStorageException.class)
+    @Test(expected = NotExistStorageException.class)
     public void updateNotExistedUuid() throws Exception {
         Assert.assertEquals(3, storage.size());
         storage.update(RESUME4);
-    }*/
+    }
 
     @Test
     public void get() throws Exception {
@@ -135,10 +135,10 @@ public abstract class AbstractStorageTest {
         storage.get(UUID_2);
     }
 
-/*    @Test(expected = NotExistStorageException.class)
+    @Test(expected = NotExistStorageException.class)
     public void deleteNotExistedUuid() throws Exception {
         storage.delete(UUID_4);
-    }*/
+    }
 
     @Test
     public void size() throws Exception {

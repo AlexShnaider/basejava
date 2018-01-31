@@ -1,18 +1,13 @@
 package ru.javawebinar.basejava;
 
 public class DeadLock {
-    private static final String LOCK_0 = new String("LOCK_0");
-    private static final String LOCK_1 = new String("LOCK_1");
+    private static final String LOCK_0 = "LOCK_0";
+    private static final String LOCK_1 = "LOCK_1";
 
     public static void main(String[] args) {
         DeadLock deadLock = new DeadLock();
-        Thread thread0 = new Thread(() -> {
-            deadLock.syncronizedMethod(LOCK_0,LOCK_1);
-        });
-        Thread thread1 = new Thread(() -> {
-            deadLock.syncronizedMethod(LOCK_1,LOCK_0);
-
-        });
+        Thread thread0 = new Thread(() -> deadLock.syncronizedMethod(LOCK_0, LOCK_1));
+        Thread thread1 = new Thread(() -> deadLock.syncronizedMethod(LOCK_1, LOCK_0));
         thread0.start();
         thread1.start();
     }
