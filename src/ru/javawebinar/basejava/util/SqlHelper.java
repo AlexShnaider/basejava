@@ -1,8 +1,6 @@
 package ru.javawebinar.basejava.util;
 
 import ru.javawebinar.basejava.Config;
-import ru.javawebinar.basejava.Exceptions.ExistStorageException;
-import ru.javawebinar.basejava.Exceptions.NotExistStorageException;
 import ru.javawebinar.basejava.Exceptions.StorageException;
 import ru.javawebinar.basejava.sql.ConnectionFactory;
 
@@ -21,27 +19,5 @@ public class SqlHelper {
         } catch (SQLException e) {
             throw new StorageException(e);
         }
-    }
-
-    public static void throwExceptionIfNotExist(String uuid) {
-        sqlExecute("SELECT * FROM resume WHERE uuid = ?", (ps) -> {
-            ps.setString(1, uuid);
-            ResultSet rs = ps.executeQuery();
-            if (!rs.next()) {
-                throw new NotExistStorageException(uuid);
-            }
-            return null;
-        });
-    }
-
-    public static ResultSet throwExceptionIfExist(String uuid) {
-        return sqlExecute("SELECT * FROM resume WHERE uuid = ?", (ps) -> {
-            ps.setString(1, uuid);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                throw new ExistStorageException(uuid);
-            }
-            return rs;
-        });
     }
 }
