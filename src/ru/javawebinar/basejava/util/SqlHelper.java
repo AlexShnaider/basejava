@@ -12,10 +12,10 @@ public class SqlHelper {
             , Config.getInstance().getDbName()
             , Config.getInstance().getDbPassword());
 
-    public static <T> T sqlExecute(String sqlRequest, SqlPreparedStatementProcessing<T> someCode) {
+    public static <T> T sqlExecute(String sqlRequest, SqlPreparedStatementProcessing<T> psProcessing) {
         try (Connection connection = CONNECTION_FACTORY.getConnection();
              PreparedStatement ps = connection.prepareStatement(sqlRequest)) {
-            return someCode.process(ps);
+            return psProcessing.process(ps);
         } catch (SQLException e) {
             throw new StorageException(e);
         }

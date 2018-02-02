@@ -71,6 +71,7 @@ public abstract class AbstractStorageTest {
     @Before
     public void setUp() throws Exception {
         storage.clear();
+        storage.clear();
         storage.save(RESUME1);
         storage.save(RESUME2);
         storage.save(RESUME3);
@@ -79,6 +80,9 @@ public abstract class AbstractStorageTest {
     @Test
     public void clear() throws Exception {
         Assert.assertEquals(3, storage.size());
+        storage.clear();
+        Assert.assertEquals(0, storage.size());
+        storage.clear();
         storage.clear();
         Assert.assertEquals(0, storage.size());
     }
