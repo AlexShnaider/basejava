@@ -4,14 +4,15 @@ public class ThreadWaitTest implements Runnable {
     private Object shared;
 
     public ThreadWaitTest(Object o) {
-        shared=o;
+        shared = o;
     }
 
     public void run() {
         synchronized (shared) {
             try {
                 shared.wait();
-            } catch (InterruptedException e) {}
+            } catch (InterruptedException e) {
+            }
             System.out.println("after wait");
         }
     }
@@ -25,7 +26,8 @@ public class ThreadWaitTest implements Runnable {
                 o.notifyAll();
                 Thread.sleep(100);
             }
-        } catch (InterruptedException e) {}
+        } catch (InterruptedException e) {
+        }
         System.out.println("before notify");
         synchronized (o) {
             o.notifyAll();

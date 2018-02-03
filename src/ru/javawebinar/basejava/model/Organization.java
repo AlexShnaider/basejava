@@ -46,8 +46,7 @@ public class Organization implements Serializable {
 
         Organization that = (Organization) o;
 
-        if (!organization.equals(that.organization)) return false;
-        return positions.equals(that.positions);
+        return organization.equals(that.organization) && positions.equals(that.positions);
     }
 
     @Override
