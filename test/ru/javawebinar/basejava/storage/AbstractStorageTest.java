@@ -33,13 +33,13 @@ public abstract class AbstractStorageTest {
 
     static {
         RESUME1 = new Resume(UUID_1, NAME_1);
-        //fillResume(RESUME1);
+        fillResume(RESUME1);
         RESUME2 = new Resume(UUID_2, NAME_2);
-        //fillResume(RESUME2);
+        fillResume(RESUME2);
         RESUME3 = new Resume(UUID_3, NAME_3);
-        //fillResume(RESUME3);
+        fillResume(RESUME3);
         RESUME4 = new Resume(UUID_4, NAME_4);
-        //fillResume(RESUME4);
+        fillResume(RESUME4);
     }
 
     protected AbstractStorageTest(Storage storage) {
@@ -50,7 +50,7 @@ public abstract class AbstractStorageTest {
         resume.addContact(ContactType.PHONE, "985-123-45-67");
         resume.addContact(ContactType.MAIL, "Some.email@gmail.com");
         resume.addContact(ContactType.SKYPE, "SomeSkypeId");
-        TextSection personalSection = new TextSection("quality1, quality2, quality3");
+        /*TextSection personalSection = new TextSection("quality1, quality2, quality3");
         resume.addSection(SectionType.PERSONAL, personalSection);
         ListSection achievementSection = new ListSection(Arrays.asList("achievement1", "achievement2", "achievement3"));
         resume.addSection(SectionType.ACHIEVEMENT, achievementSection);
@@ -65,7 +65,7 @@ public abstract class AbstractStorageTest {
         Organization university1 = new Organization("university1", null, positions);
         Organization university2 = new Organization("university2", null, positions);
         OrganizationSection educationSection = new OrganizationSection(Arrays.asList(university1, university2));
-        resume.addSection(SectionType.EDUCATION, educationSection);
+        resume.addSection(SectionType.EDUCATION, educationSection);*/
     }
 
     @Before
