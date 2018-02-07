@@ -9,8 +9,6 @@ import ru.javawebinar.basejava.Exceptions.NotExistStorageException;
 import ru.javawebinar.basejava.model.*;
 
 import java.io.File;
-import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 
 public abstract class AbstractStorageTest {
@@ -33,20 +31,20 @@ public abstract class AbstractStorageTest {
 
     static {
         RESUME1 = new Resume(UUID_1, NAME_1);
-        fillResume(RESUME1);
+        populateResume(RESUME1);
         RESUME2 = new Resume(UUID_2, NAME_2);
-        fillResume(RESUME2);
+        populateResume(RESUME2);
         RESUME3 = new Resume(UUID_3, NAME_3);
-        fillResume(RESUME3);
+        populateResume(RESUME3);
         RESUME4 = new Resume(UUID_4, NAME_4);
-        fillResume(RESUME4);
+        populateResume(RESUME4);
     }
 
     protected AbstractStorageTest(Storage storage) {
         this.storage = storage;
     }
 
-    private static void fillResume(Resume resume) {
+    private static void populateResume(Resume resume) {
         resume.addContact(ContactType.PHONE, "985-123-45-67");
         resume.addContact(ContactType.MAIL, "Some.email@gmail.com");
         resume.addContact(ContactType.SKYPE, "SomeSkypeId");
@@ -108,6 +106,15 @@ public abstract class AbstractStorageTest {
         Assert.assertEquals(3, storage.size());
         storage.update(RESUME1);
         Assert.assertEquals(3, storage.size());
+        Resume updatedResume1 = new Resume(UUID_1, NAME_1);
+        updatedResume1.addContact(ContactType.PHONE, "654321");
+        updatedResume1.addContact(ContactType.MAIL, "Some.new.email@gmail.com");
+        storage.update(updatedResume1);
+        Assert.assertEquals(updatedResume1,storage.get(UUID_1));
+        updatedResume1.addContact(ContactType.LINKEDIN, "LinkedInId");
+        storage.update(updatedResume1);
+        Assert.assertEquals(updatedResume1,storage.get(UUID_1));
+
     }
 
     @Test(expected = NotExistStorageException.class)
