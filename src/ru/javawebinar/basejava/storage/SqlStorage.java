@@ -1,8 +1,7 @@
 package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.Exceptions.NotExistStorageException;
-import ru.javawebinar.basejava.model.ContactType;
-import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.model.*;
 import ru.javawebinar.basejava.sql.SqlHelper;
 
 import java.sql.*;
@@ -30,6 +29,7 @@ public class SqlStorage implements Storage {
                 ps.execute();
             }
             insertContacts(conn, r);
+            insertSections(conn, r);
             return null;
         });
     }
@@ -40,16 +40,23 @@ public class SqlStorage implements Storage {
             try (PreparedStatement ps = conn.prepareStatement("UPDATE resume SET full_name = ? WHERE uuid = ?")) {
                 ps.setString(1, r.getFullName());
                 ps.setString(2, r.getUuid());
+                if (ps.executeUpdate() == 0) {
+                    throw new NotExistStorageException(r.getUuid());
+                }
             }
             deleteContacts(conn, r);
+            deleteSections(conn, r);
             insertContacts(conn, r);
+            insertSections(conn, r);
             return null;
         });
     }
 
     @Override
     public Resume get(String uuid) {
-        return sqlHelper.execute("SELECT * FROM resume r LEFT JOIN contact c ON r.uuid = c.resume_uuid WHERE r.uuid=?", ps -> {
+        return sqlHelper.execute("SELECT r.uuid, r.full_name, c.type, c.value, s.type sectionType, s.text "
+                + "FROM resume r LEFT JOIN contact c ON r.uuid = c.resume_uuid "
+                + "LEFT JOIN section s ON r.uuid = s.resume_uuid WHERE r.uuid=?", ps -> {
             ps.setString(1, uuid);
             ResultSet rs = ps.executeQuery();
             if (!rs.next()) {
@@ -58,6 +65,7 @@ public class SqlStorage implements Storage {
             Resume resume = new Resume(uuid.trim(), rs.getString("full_name"));
             do {
                 addContact(rs, resume);
+                addSection(rs, resume);
             } while (rs.next());
             return resume;
         });
@@ -93,6 +101,15 @@ public class SqlStorage implements Storage {
                     addContact(rs, resume);
                 }
             }
+            try (PreparedStatement ps = conn.prepareStatement(
+                    "SELECT resume_uuid, type sectionType, text FROM section ORDER BY resume_uuid")) {
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    String contactUuid = rs.getString("resume_uuid").trim();
+                    Resume resume = resumes.get(contactUuid);
+                    addSection(rs, resume);
+                }
+            }
             return null;
         });
         return new ArrayList<>(resumes.values());
@@ -122,9 +139,7 @@ public class SqlStorage implements Storage {
     private void deleteContacts(Connection conn, Resume resume) throws SQLException {
         try (PreparedStatement ps = conn.prepareStatement("DELETE FROM contact WHERE resume_uuid = ?")) {
             ps.setString(1, resume.getUuid());
-            if (ps.executeUpdate() == 0) {
-                throw new NotExistStorageException(resume.getUuid());
-            }
+            ps.execute();
         }
     }
 
@@ -132,6 +147,68 @@ public class SqlStorage implements Storage {
         String type = rs.getString("type");
         if (type != null) {
             resume.addContact(ContactType.valueOf(type), rs.getString("value"));
+        }
+    }
+
+    private void insertSections(Connection conn, Resume r) throws SQLException {
+        try (PreparedStatement ps = conn.prepareStatement("INSERT INTO section (type, text, resume_uuid) VALUES (?,?,?)")) {
+            for (Map.Entry<SectionType, Section> entry : r.getSections().entrySet()) {
+                SectionType sectionType = entry.getKey();
+                ps.setString(1, sectionType.name());
+                ps.setString(3, r.getUuid());
+                switch (sectionType) {
+                    case OBJECTIVE:
+                    case PERSONAL:
+                        TextSection textSection = (TextSection) entry.getValue();
+                        ps.setString(2, textSection.getText());
+                        break;
+                    case ACHIEVEMENT:
+                    case QUALIFICATIONS:
+                        ListSection listSection = (ListSection) entry.getValue();
+                        StringBuilder allLines = new StringBuilder();
+                        for (String line : listSection.getLines()) {
+                            allLines.append(line).append('\n');
+                        }
+                        ps.setString(2, allLines.toString());
+                        break;
+                    case EXPERIENCE:
+                    case EDUCATION:
+                    default:
+                        break;
+                }
+                ps.addBatch();
+            }
+            ps.executeBatch();
+        }
+    }
+
+    private void addSection(ResultSet rs, Resume resume) throws SQLException {
+        String sectionTypeName = rs.getString("sectionType");
+        if (sectionTypeName == null) {
+            return;
+        }
+        SectionType sectionType = SectionType.valueOf(sectionTypeName);
+        String text = rs.getString("text");
+        switch (sectionType) {
+            case OBJECTIVE:
+            case PERSONAL:
+                resume.addSection(sectionType, new TextSection(text));
+                break;
+            case ACHIEVEMENT:
+            case QUALIFICATIONS:
+                resume.addSection(sectionType, new ListSection(Arrays.asList(text.split("\n"))));
+                break;
+            case EXPERIENCE:
+            case EDUCATION:
+            default:
+                break;
+        }
+    }
+
+    private void deleteSections(Connection conn, Resume resume) throws SQLException {
+        try (PreparedStatement ps = conn.prepareStatement("DELETE FROM section WHERE resume_uuid = ?")) {
+            ps.setString(1, resume.getUuid());
+            ps.execute();
         }
     }
 }

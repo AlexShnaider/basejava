@@ -9,6 +9,7 @@ import ru.javawebinar.basejava.Exceptions.NotExistStorageException;
 import ru.javawebinar.basejava.model.*;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 
 public abstract class AbstractStorageTest {
@@ -48,11 +49,11 @@ public abstract class AbstractStorageTest {
         resume.addContact(ContactType.PHONE, "985-123-45-67");
         resume.addContact(ContactType.MAIL, "Some.email@gmail.com");
         resume.addContact(ContactType.SKYPE, "SomeSkypeId");
-        /*TextSection personalSection = new TextSection("quality1, quality2, quality3");
+        TextSection personalSection = new TextSection("quality1, quality2, quality3");
         resume.addSection(SectionType.PERSONAL, personalSection);
         ListSection achievementSection = new ListSection(Arrays.asList("achievement1", "achievement2", "achievement3"));
         resume.addSection(SectionType.ACHIEVEMENT, achievementSection);
-        LocalDate date = LocalDate.of(2007, 12, 1);
+        /*LocalDate date = LocalDate.of(2007, 12, 1);
         String organizationTitle = "organizationTitle";
         String organizationText = "organizationText";
         List<Organization.Position> positions = Arrays.asList(new Organization.Position(date, date, organizationTitle, organizationText));
@@ -109,6 +110,10 @@ public abstract class AbstractStorageTest {
         Resume updatedResume1 = new Resume(UUID_1, NAME_1);
         updatedResume1.addContact(ContactType.PHONE, "654321");
         updatedResume1.addContact(ContactType.MAIL, "Some.new.email@gmail.com");
+        updatedResume1.addSection(SectionType.ACHIEVEMENT
+                , new ListSection(Arrays.asList("achievement4", "achievement5", "achievement6")));
+        updatedResume1.addSection(SectionType.PERSONAL, new TextSection("the best of the best"));
+
         storage.update(updatedResume1);
         Assert.assertEquals(updatedResume1, storage.get(UUID_1));
         updatedResume1.addContact(ContactType.LINKEDIN, "LinkedInId");
