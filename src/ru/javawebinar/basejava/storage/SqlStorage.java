@@ -32,7 +32,7 @@ public class SqlStorage implements Storage {
     @Override
     public void update(Resume r) {
         sqlHelper.transactionalExecute(conn -> {
-            doDelete(conn,r.getUuid());
+            doDelete(conn, r.getUuid());
             doSave(conn, r);
             return null;
         });
@@ -53,21 +53,32 @@ public class SqlStorage implements Storage {
 
     @Override
     public List<Resume> getAllSorted() {
-        return sqlHelper.transactionalExecute(conn -> {
-            List<String> uuids = new ArrayList<>();
-            List<Resume> resumes = new ArrayList<>();
-            try (PreparedStatement ps = conn.prepareStatement("SELECT uuid FROM resume")) {
+        List<Resume> resumes = new ArrayList<>();
+        sqlHelper.transactionalExecute(conn -> {
+            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM resume ORDER BY uuid")) {
                 ResultSet rs = ps.executeQuery();
                 while (rs.next()) {
-                    uuids.add(rs.getString("uuid"));
+                    resumes.add(new Resume(rs.getString("uuid").trim(), rs.getString("full_name")));
                 }
             }
-            for (String uuid : uuids) {
-                resumes.add(getResume(conn, uuid));
+            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM contact ORDER BY resume_uuid"
+                    , ResultSet.TYPE_SCROLL_INSENSITIVE
+                    , ResultSet.CONCUR_READ_ONLY)) {
+                ResultSet rs = ps.executeQuery();
+                for (Resume resume : resumes) {
+                    while (rs.next()) {
+                        if (resume.getUuid().equals(rs.getString("resume_uuid").trim())) {
+                            resume.addContact(ContactType.valueOf(rs.getString("type")), rs.getString("value"));
+                        } else {
+                            rs.previous();
+                            break;
+                        }
+                    }
+                }
             }
-            Collections.sort(resumes);
-            return resumes;
+            return null;
         });
+        return resumes;
     }
 
     @Override
