@@ -110,10 +110,10 @@ public abstract class AbstractStorageTest {
         updatedResume1.addContact(ContactType.PHONE, "654321");
         updatedResume1.addContact(ContactType.MAIL, "Some.new.email@gmail.com");
         storage.update(updatedResume1);
-        Assert.assertEquals(updatedResume1,storage.get(UUID_1));
+        Assert.assertEquals(updatedResume1, storage.get(UUID_1));
         updatedResume1.addContact(ContactType.LINKEDIN, "LinkedInId");
         storage.update(updatedResume1);
-        Assert.assertEquals(updatedResume1,storage.get(UUID_1));
+        Assert.assertEquals(updatedResume1, storage.get(UUID_1));
 
     }
 
