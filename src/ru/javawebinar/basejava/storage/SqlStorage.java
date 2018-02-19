@@ -3,6 +3,7 @@ package ru.javawebinar.basejava.storage;
 import ru.javawebinar.basejava.Exceptions.NotExistStorageException;
 import ru.javawebinar.basejava.model.*;
 import ru.javawebinar.basejava.sql.SqlHelper;
+import ru.javawebinar.basejava.util.JsonParser;
 
 import java.sql.*;
 import java.util.*;
@@ -166,7 +167,7 @@ public class SqlStorage implements Storage {
         }
     }
 
-    private void insertSections(Connection conn, Resume r) throws SQLException {
+/*    private void insertSections(Connection conn, Resume r) throws SQLException {
         try (PreparedStatement ps = conn.prepareStatement("INSERT INTO section (type, text, resume_uuid) VALUES (?,?,?)")) {
             for (Map.Entry<SectionType, Section> entry : r.getSections().entrySet()) {
                 SectionType sectionType = entry.getKey();
@@ -196,9 +197,22 @@ public class SqlStorage implements Storage {
             }
             ps.executeBatch();
         }
+    }*/
+
+    private void insertSections(Connection conn, Resume r) throws SQLException {
+        try (PreparedStatement ps = conn.prepareStatement("INSERT INTO section (resume_uuid, type, text) VALUES (?,?,?)")) {
+            for (Map.Entry<SectionType, Section> e : r.getSections().entrySet()) {
+                ps.setString(1, r.getUuid());
+                ps.setString(2, e.getKey().name());
+                Section section = e.getValue();
+                ps.setString(3, JsonParser.write(section, Section.class));
+                ps.addBatch();
+            }
+            ps.executeBatch();
+        }
     }
 
-    private void addSection(ResultSet rs, Resume resume) throws SQLException {
+/*    private void addSection(ResultSet rs, Resume resume) throws SQLException {
         String sectionTypeName = rs.getString("type");
         if (sectionTypeName == null) {
             return;
@@ -218,6 +232,14 @@ public class SqlStorage implements Storage {
             case EDUCATION:
             default:
                 break;
+        }
+    }*/
+
+    private void addSection(ResultSet rs, Resume r) throws SQLException {
+        String content = rs.getString("text");
+        if (content != null) {
+            SectionType type = SectionType.valueOf(rs.getString("type"));
+            r.addSection(type, JsonParser.read(content, Section.class));
         }
     }
 

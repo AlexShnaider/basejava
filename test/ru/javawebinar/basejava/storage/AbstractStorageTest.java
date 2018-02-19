@@ -9,6 +9,7 @@ import ru.javawebinar.basejava.Exceptions.NotExistStorageException;
 import ru.javawebinar.basejava.model.*;
 
 import java.io.File;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -53,7 +54,7 @@ public abstract class AbstractStorageTest {
         resume.addSection(SectionType.PERSONAL, personalSection);
         ListSection achievementSection = new ListSection(Arrays.asList("achievement1", "achievement2", "achievement3"));
         resume.addSection(SectionType.ACHIEVEMENT, achievementSection);
-        /*LocalDate date = LocalDate.of(2007, 12, 1);
+        LocalDate date = LocalDate.of(2007, 12, 1);
         String organizationTitle = "organizationTitle";
         String organizationText = "organizationText";
         List<Organization.Position> positions = Arrays.asList(new Organization.Position(date, date, organizationTitle, organizationText));
@@ -64,7 +65,7 @@ public abstract class AbstractStorageTest {
         Organization university1 = new Organization("university1", null, positions);
         Organization university2 = new Organization("university2", null, positions);
         OrganizationSection educationSection = new OrganizationSection(Arrays.asList(university1, university2));
-        resume.addSection(SectionType.EDUCATION, educationSection);*/
+        resume.addSection(SectionType.EDUCATION, educationSection);
     }
 
     @Before
