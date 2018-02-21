@@ -23,5 +23,6 @@ public class MainResume {
         resume.addSection(SectionType.ACHIEVEMENT, achievementSection);
         resume.addSection(SectionType.EXPERIENCE, experienceSection);
         System.out.println(resume.toString());
+        System.out.println(resume.getClass().getSimpleName());
     }
 }

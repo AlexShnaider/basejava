@@ -1,13 +1,35 @@
 header {
-     background: none repeat scroll 0 0 #D3D3D3;
-     color: crimson;
-     font-size: 20px;
-     padding: 5px 20px;
- }
+    background: none repeat scroll 0 0 #D3D3D3;
+    color: crimson;
+    font-size: 20px;
+    padding: 5px 20px;
+}
 
 footer {
     background: none repeat scroll 0 0 #D3D3D3;
     color: chocolate;
     font-size: 20px;
     padding: 5px 10px;
+}
+
+dt {
+    font-weight: bold;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+dd {
+    margin-left: 140px;
+}
+
+dl.inline dd {
+    display: inline;
+    margin: 0;
+}
+dl.inline dd:after{
+    display: block;
+    content: '';
+}
+dl.inline dt{
+    display: inline-block;
+    min-width: 140px;
 }

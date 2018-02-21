@@ -50,20 +50,31 @@ public abstract class AbstractStorageTest {
         resume.addContact(ContactType.PHONE, "985-123-45-67");
         resume.addContact(ContactType.MAIL, "Some.email@gmail.com");
         resume.addContact(ContactType.SKYPE, "SomeSkypeId");
+        resume.addContact(ContactType.LINKEDIN, "LinkedInId");
+        resume.addContact(ContactType.HOME_PAGE, "https://somepage.com");
+        resume.addContact(ContactType.STACKOVERFLOW, "stackOverflowID");
+        resume.addContact(ContactType.GITHUB, "girHubID");
         TextSection personalSection = new TextSection("quality1, quality2, quality3");
         resume.addSection(SectionType.PERSONAL, personalSection);
         ListSection achievementSection = new ListSection(Arrays.asList("achievement1", "achievement2", "achievement3"));
         resume.addSection(SectionType.ACHIEVEMENT, achievementSection);
-        LocalDate date = LocalDate.of(2007, 12, 1);
-        String organizationTitle = "organizationTitle";
-        String organizationText = "organizationText";
-        List<Organization.Position> positions = Arrays.asList(new Organization.Position(date, date, organizationTitle, organizationText));
-        Organization organization1 = new Organization("company1", "", positions);
-        Organization organization2 = new Organization("company2", "", positions);
+        LocalDate startDate1 = LocalDate.of(2007, 12, 1);
+        LocalDate startDate2 = LocalDate.of(2010, 12, 1);
+        LocalDate finishDate1 = LocalDate.of(2008, 12, 1);
+        LocalDate finishDate2 = LocalDate.of(2012, 12, 1);
+        String positionTitle1 = "position1 title";
+        String positionTitle2 = "position2 title";
+        String positionText1 = "position1 description";
+        String positionText2 = "position2 description";
+        List<Organization.Position> positions = Arrays.asList(
+                new Organization.Position(startDate1, finishDate1, positionTitle1, positionText1)
+                , new Organization.Position(startDate2, finishDate2, positionTitle2, positionText2));
+        Organization organization1 = new Organization("company1", "https://company1.com", positions);
+        Organization organization2 = new Organization("company2", "https://company2.com", positions);
         OrganizationSection experienceSection = new OrganizationSection(Arrays.asList(organization1, organization2));
         resume.addSection(SectionType.EXPERIENCE, experienceSection);
-        Organization university1 = new Organization("university1", null, positions);
-        Organization university2 = new Organization("university2", null, positions);
+        Organization university1 = new Organization("university1", "https://university1.com", positions);
+        Organization university2 = new Organization("university2", "https://university2.com", positions);
         OrganizationSection educationSection = new OrganizationSection(Arrays.asList(university1, university2));
         resume.addSection(SectionType.EDUCATION, educationSection);
     }

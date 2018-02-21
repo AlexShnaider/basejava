@@ -59,6 +59,14 @@ public class Resume implements Comparable<Resume>, Serializable {
         return contacts.get(type);
     }
 
+    public Section getSection(SectionType type) {
+        return sections.get(type);
+    }
+
+    public Section getOrganization(SectionType type) {
+        return sections.get(type);
+    }
+
     @Override
     public String toString() {
         return uuid + '(' + fullName + ')';
@@ -84,5 +92,9 @@ public class Resume implements Comparable<Resume>, Serializable {
     public int compareTo(Resume o) {
         int compFullName = fullName.compareTo(o.getFullName());
         return compFullName != 0 ? compFullName : uuid.compareTo(o.getUuid());
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 }

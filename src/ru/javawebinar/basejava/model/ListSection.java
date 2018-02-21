@@ -21,7 +21,9 @@ public class ListSection extends Section {
     }
 
     public void addLine(String line) {
-        lines.add(line);
+        if (line != null && !lines.contains(line)) {
+            lines.add(line);
+        }
     }
 
     @Override
