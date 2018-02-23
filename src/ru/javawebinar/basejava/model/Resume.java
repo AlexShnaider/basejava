@@ -63,6 +63,10 @@ public class Resume implements Comparable<Resume>, Serializable {
         return sections.get(type);
     }
 
+    public Section getOrganization(SectionType type) {
+        return sections.get(type);
+    }
+
     @Override
     public String toString() {
         return uuid + '(' + fullName + ')';
