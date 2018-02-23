@@ -14,7 +14,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" href="css/style.css">
     <jsp:useBean id="resume" type="ru.javawebinar.basejava.model.Resume" scope="request"/>
-    <%--<jsp:useBean id="textSection" type="ru.javawebinar.basejava.model.TextSection" scope="request"/>--%>
     <title>Resume ${resume.fullName}</title>
 </head>
 <body>
@@ -44,7 +43,7 @@
                     <c:when test="${resume.getSection(type).getClass().getSimpleName() == 'TextSection'}">
                         <dd>
                             <input type="text" name="${type.name()}" size=100
-                                   value="${resume.getSection(type).getText()}">
+                                   value="${resume.getSection(type).getText()}"/>
                         </dd>
                     </c:when>
 
@@ -56,21 +55,37 @@
                         </dd>
                     </c:when>
 
+                    <%--<c:when test="${type.name() == SectionType.EXPERIENCE || type.name() == SectionType.EDUCATION}">--%>
                     <c:when test="${resume.getSection(type).getClass().getSimpleName() == 'OrganizationSection'}">
+                        <c:set var="organizationMarker" value="${0}"/>
                         <c:forEach var="organization" items="${resume.getSection(type).getOrganizations()}">
-                            <c:forEach var="position" items="${organization.getPositions()}">
-                                <dd>
-                                    Company <input type="text" name="${organization.getOrganization().getName()}Name" size=60 value="${organization.getOrganization().getName()}"><br/> <br/>
-                                    Url <input type="text" name="${organization.getOrganization().getName()}Url" size=60 value="${organization.getOrganization().getUrl()}"><br/> <br/>
-                                    From <input type="text" name="${organization.getOrganization().getName()}StartDate" size=60 value="${position.getStartDate()}"><br/> <br/>
-                                    To <input type="text" name="${organization.getOrganization().getName()}FinishDateDate" size=60
-                                              value="${position.getFinishDate()}"><br/> <br/>
-                                    Position title <input type="text" name="${organization.getOrganization().getName()}PositionName" size=60
-                                                          value="${position.getTextTitle()}"><br/> <br/>
-                                    Position description <input type="text" name="${organization.getOrganization().getName()}PositionDescription" size=60
-                                                                value="${position.getText()}"><br/> <br/><br/> <br/>
-                                </dd>
-                            </c:forEach>
+                            <dd>
+                                Company <input type="text" name="${type.name()}"
+                                               size=60 value="${organization.getOrganization().getName()}"><br/> <br/>
+                                Url <input type="text" name="${type.name()}Url" size=60
+                                           value="${organization.getOrganization().getUrl()}"><br/> <br/>
+
+                                <c:forEach var="position" items="${organization.getPositions()}">
+                                    From
+                                    <input type="text" name="StartDate${type.name()}${organizationMarker}"
+                                           size=60 value="${position.getStartDate()}"><br/> <br/>
+                                    To
+                                    <input type="text"
+                                           name="FinishDate${type.name()}${organizationMarker}" size=60
+                                           value="${position.getFinishDate()}"><br/> <br/>
+                                    Position title
+                                    <input type="text"
+                                           name="PositionName${type.name()}${organizationMarker}"
+                                           size=60
+                                           value="${position.getTextTitle()}"><br/> <br/>
+                                    Position description
+                                    <input type="text"
+                                           name="PositionDescription${type.name()}${organizationMarker}"
+                                           size=60
+                                           value="${position.getText()}"><br/> <br/><br/> <br/>
+                                </c:forEach>
+                                <c:set var="organizationMarker" value="${organizationMarker + 1}"/>
+                            </dd>
                         </c:forEach>
                     </c:when>
 
@@ -86,7 +101,7 @@
         </c:forEach>
         <hr>
         <button type="submit">Save</button>
-        <button onclick="window.history.back()">Cancel</button>
+        <button type="button" onclick="window.history.back()">Cancel</button>
     </form>
 </section>
 <jsp:include page="fragments/footer.jsp"/>

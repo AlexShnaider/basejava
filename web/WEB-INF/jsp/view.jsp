@@ -22,9 +22,43 @@
         <c:forEach var="contactEntry" items="${resume.contacts}">
             <jsp:useBean id="contactEntry"
                          type="java.util.Map.Entry<ru.javawebinar.basejava.model.ContactType, java.lang.String>"/>
-            <img src="img/${contactEntry.getKey()}.png"> <%--${contactEntry.getKey().getTitle()}--%> ${contactEntry.getValue()}<br/>
+            <img src="img/${contactEntry.getKey()}.png"> ${contactEntry.value}<br/>
         </c:forEach>
-    <p>
+    </p>
+
+    <c:forEach var="type" items="${resume.sections}">
+        <dl>
+            <dt>${type.key.title}:</dt>
+            <c:set var="section" value="${resume.getSection(type.key)}"/>
+            <c:choose>
+                <c:when test="${section.getClass().getSimpleName() == 'TextSection'}">
+                    <dd>${section.getText()}</dd>
+                    <br/>
+                </c:when>
+
+                <c:when test="${section.getClass().getSimpleName() == 'ListSection'}">
+                    <c:forEach var="line" items="${section.getLines()}">
+                        <dd>${line}</dd>
+                        <br/>
+                    </c:forEach>
+                </c:when>
+
+                <c:when test="${section.getClass().getSimpleName() == 'OrganizationSection'}">
+                    <c:forEach var="organization" items="${section.getOrganizations()}">
+                        <dd><a href="${organization.getOrganization().getUrl()}">
+                                ${organization.getOrganization().getName()}</a></dd>
+                        <br/>
+                        <c:forEach var="position" items="${organization.getPositions()}">
+                            <dd>${position.getStartDate()} - ${position.getFinishDate()}</dd>
+                            <dd>${position.getTextTitle()}</dd>
+                            <dd>${position.getText()}</dd>
+                            <br/>
+                        </c:forEach>
+                    </c:forEach>
+                </c:when>
+            </c:choose>
+        </dl>
+    </c:forEach>
 </section>
 <jsp:include page="fragments/footer.jsp"/>
 </body>

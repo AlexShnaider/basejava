@@ -39,6 +39,10 @@ public class Organization implements Serializable {
         return positions;
     }
 
+    public void addPosition(Position position) {
+        positions.add(position);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class ResumeServlet extends HttpServlet {
     private final Storage storage = Config.getInstance().getSqlStorage();
@@ -41,12 +43,13 @@ public class ResumeServlet extends HttpServlet {
                     break;
                 case ACHIEVEMENT:
                 case QUALIFICATIONS:
-                    ListSection listSection = (ListSection) r.getSection(type);
+                    ListSection listSection = r.getSection(type) == null
+                            ? new ListSection() : (ListSection) r.getSection(type);
                     for (int i = 0, j = 0; i < values.length; i++) {
                         if (values[i] != null && values[i].trim().length() != 0) {
                             listSection.addLine(values[i]);
                         } else {
-                            if (listSection != null) {
+                            if (listSection != null && listSection.getLines().size() != 0) {
                                 listSection.getLines().remove(i - j++);
                             }
                         }
@@ -56,13 +59,46 @@ public class ResumeServlet extends HttpServlet {
                     } else {
                         r.getSections().remove(type);
                     }
+                    break;
+                case EXPERIENCE:
+                case EDUCATION:
+                    OrganizationSection organizationSection = new OrganizationSection();
+                    String[] urls = request.getParameterValues(type + "Url");
+                    for (int i = 0, j = 0; i < values.length; i++) {
+                        String companyName = values[i];
+                        String companyUrl = urls[i];
+                        String[] startDates = request.getParameterValues("StartDate" + type.name() + i);
+                        String[] finishDates = request.getParameterValues("FinishDate" + type.name() + i);
+                        String[] positionNames = request.getParameterValues("PositionName" + type.name() + i);
+                        String[] positionDescriptions =
+                                request.getParameterValues("PositionDescription" + type.name() + i);
+                        if (companyName != null && companyName.trim().length() != 0) {
+                            Organization organization = new Organization(companyName, companyUrl, new ArrayList<>());
+                            for (int k = 0; k < positionNames.length; k++) {
+                                if (positionNames[k] != null && positionNames[k].trim().length() != 0
+                                        && startDates[k] != null && startDates[k].trim().length() != 0
+                                        && finishDates[k] != null && finishDates[k].trim().length() != 0) {
+                                    organization.addPosition(new Organization.Position(LocalDate.parse(startDates[k])
+                                            , LocalDate.parse(finishDates[k]), positionNames[k], positionDescriptions[k]));
+                                }
+                            }
+                            organizationSection.addOrganization(organization);
+                        }
+                    }
+                    if (organizationSection != null && organizationSection.getOrganizations().size() != 0) {
+                        r.addSection(type, organizationSection);
+                    } else {
+                        r.getSections().remove(type);
+                    }
+                    break;
             }
         }
         storage.update(r);
         response.sendRedirect("resume");
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
         String uuid = request.getParameter("uuid");
         String action = request.getParameter("action");
         if (action == null) {
