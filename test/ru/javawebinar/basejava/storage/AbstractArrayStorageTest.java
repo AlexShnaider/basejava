@@ -5,9 +5,6 @@ import org.junit.Test;
 import ru.javawebinar.basejava.Exceptions.StorageException;
 import ru.javawebinar.basejava.model.Resume;
 
-import java.util.Arrays;
-import java.util.List;
-
 public class AbstractArrayStorageTest extends AbstractStorageTest {
     protected AbstractArrayStorageTest(Storage storage) {
         super(storage);
@@ -25,10 +22,4 @@ public class AbstractArrayStorageTest extends AbstractStorageTest {
         }
         storage.save(new Resume("new_uuid"));
     }
-
-/*    @Test
-    public void getAllSorted() throws Exception {
-        List<Resume> resumes = Arrays.asList(RESUME1, RESUME2, RESUME3);
-        Assert.assertArrayEquals(resumes, storage.getAllSorted());
-    }*/
 }

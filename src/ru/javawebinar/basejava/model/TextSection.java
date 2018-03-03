@@ -4,6 +4,8 @@ import java.util.Objects;
 
 public class TextSection extends Section {
 
+    public static final TextSection EMPTY = new TextSection("");
+
     private String text;
 
     public TextSection() {

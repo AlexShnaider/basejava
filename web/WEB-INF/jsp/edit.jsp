@@ -55,7 +55,6 @@
                         </dd>
                     </c:when>
 
-                    <%--<c:when test="${type.name() == SectionType.EXPERIENCE || type.name() == SectionType.EDUCATION}">--%>
                     <c:when test="${resume.getSection(type).getClass().getSimpleName() == 'OrganizationSection'}">
                         <c:set var="organizationMarker" value="${0}"/>
                         <c:forEach var="organization" items="${resume.getSection(type).getOrganizations()}">

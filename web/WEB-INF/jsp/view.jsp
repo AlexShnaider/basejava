@@ -45,7 +45,7 @@
 
                 <c:when test="${section.getClass().getSimpleName() == 'OrganizationSection'}">
                     <c:forEach var="organization" items="${section.getOrganizations()}">
-                        <dd><a href="${organization.getOrganization().getUrl()}">
+                        <dd><a href="http://${organization.getOrganization().getUrl()}">
                                 ${organization.getOrganization().getName()}</a></dd>
                         <br/>
                         <c:forEach var="position" items="${organization.getPositions()}">

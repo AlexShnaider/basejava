@@ -5,9 +5,6 @@
   Time: 23:54
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page import="ru.javawebinar.basejava.model.Resume" %>
-<%@ page import="java.util.List" %>
-<%@ page import="ru.javawebinar.basejava.model.ContactType" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
@@ -36,6 +33,9 @@
             </tr>
         </c:forEach>
     </table>
+    <br/>
+    <a href="resume?action=add"><img src="img/add.png"></a>
+    <br/>
 </section>
 <jsp:include page="fragments/footer.jsp"/>
 </body>

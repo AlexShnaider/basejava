@@ -1,12 +1,18 @@
 package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.Exceptions.NotExistStorageException;
-import ru.javawebinar.basejava.model.*;
+import ru.javawebinar.basejava.model.ContactType;
+import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.model.Section;
+import ru.javawebinar.basejava.model.SectionType;
 import ru.javawebinar.basejava.sql.SqlHelper;
 import ru.javawebinar.basejava.util.JsonParser;
 
 import java.sql.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class SqlStorage implements Storage {
 
@@ -167,38 +173,6 @@ public class SqlStorage implements Storage {
         }
     }
 
-/*    private void insertSections(Connection conn, Resume r) throws SQLException {
-        try (PreparedStatement ps = conn.prepareStatement("INSERT INTO section (type, text, resume_uuid) VALUES (?,?,?)")) {
-            for (Map.Entry<SectionType, Section> entry : r.getSections().entrySet()) {
-                SectionType sectionType = entry.getKey();
-                ps.setString(1, sectionType.name());
-                ps.setString(3, r.getUuid());
-                switch (sectionType) {
-                    case OBJECTIVE:
-                    case PERSONAL:
-                        TextSection textSection = (TextSection) entry.getValue();
-                        ps.setString(2, textSection.getText());
-                        break;
-                    case ACHIEVEMENT:
-                    case QUALIFICATIONS:
-                        ListSection listSection = (ListSection) entry.getValue();
-                        StringBuilder allLines = new StringBuilder();
-                        for (String line : listSection.getLines()) {
-                            allLines.append(line).append('\n');
-                        }
-                        ps.setString(2, allLines.toString());
-                        break;
-                    case EXPERIENCE:
-                    case EDUCATION:
-                    default:
-                        break;
-                }
-                ps.addBatch();
-            }
-            ps.executeBatch();
-        }
-    }*/
-
     private void insertSections(Connection conn, Resume r) throws SQLException {
         try (PreparedStatement ps = conn.prepareStatement("INSERT INTO section (resume_uuid, type, text) VALUES (?,?,?)")) {
             for (Map.Entry<SectionType, Section> e : r.getSections().entrySet()) {
@@ -211,29 +185,6 @@ public class SqlStorage implements Storage {
             ps.executeBatch();
         }
     }
-
-/*    private void addSection(ResultSet rs, Resume resume) throws SQLException {
-        String sectionTypeName = rs.getString("type");
-        if (sectionTypeName == null) {
-            return;
-        }
-        SectionType sectionType = SectionType.valueOf(sectionTypeName);
-        String text = rs.getString("text");
-        switch (sectionType) {
-            case OBJECTIVE:
-            case PERSONAL:
-                resume.addSection(sectionType, new TextSection(text));
-                break;
-            case ACHIEVEMENT:
-            case QUALIFICATIONS:
-                resume.addSection(sectionType, new ListSection(Arrays.asList(text.split("\n"))));
-                break;
-            case EXPERIENCE:
-            case EDUCATION:
-            default:
-                break;
-        }
-    }*/
 
     private void addSection(ResultSet rs, Resume r) throws SQLException {
         String content = rs.getString("text");

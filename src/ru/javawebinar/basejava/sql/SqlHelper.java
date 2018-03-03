@@ -2,7 +2,9 @@ package ru.javawebinar.basejava.sql;
 
 import ru.javawebinar.basejava.Exceptions.StorageException;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class SqlHelper {
     private final ConnectionFactory connectionFactory;

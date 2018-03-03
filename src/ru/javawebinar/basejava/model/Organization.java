@@ -8,12 +8,16 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Organization implements Serializable {
+
+    public static final Organization EMPTY = new Organization("", "", Collections.singletonList(Position.EMPTY));
+
     private Link organization;
     private final List<Position> positions;
 
@@ -70,6 +74,8 @@ public class Organization implements Serializable {
 
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class Position implements Serializable {
+
+        public static final Position EMPTY = new Position();
 
         @XmlJavaTypeAdapter(LocalDateXmlAdapter.class)
         private LocalDate startDate;

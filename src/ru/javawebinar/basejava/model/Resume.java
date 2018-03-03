@@ -12,6 +12,18 @@ import java.util.*;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Resume implements Comparable<Resume>, Serializable {
+
+    public static final Resume EMPTY = new Resume("");
+
+    static {
+        EMPTY.addSection(SectionType.OBJECTIVE, TextSection.EMPTY);
+        EMPTY.addSection(SectionType.PERSONAL, TextSection.EMPTY);
+        EMPTY.addSection(SectionType.ACHIEVEMENT, ListSection.EMPTY);
+        EMPTY.addSection(SectionType.QUALIFICATIONS, ListSection.EMPTY);
+        EMPTY.addSection(SectionType.EXPERIENCE, new OrganizationSection(Collections.singletonList(Organization.EMPTY)));
+        EMPTY.addSection(SectionType.EDUCATION, new OrganizationSection(Collections.singletonList(Organization.EMPTY)));
+    }
+
     private String uuid;
     private String fullName;
     private final Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
@@ -60,10 +72,6 @@ public class Resume implements Comparable<Resume>, Serializable {
     }
 
     public Section getSection(SectionType type) {
-        return sections.get(type);
-    }
-
-    public Section getOrganization(SectionType type) {
         return sections.get(type);
     }
 

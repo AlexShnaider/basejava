@@ -17,6 +17,7 @@ dt {
     margin-top: 8px;
     margin-bottom: 8px;
 }
+
 dd {
     margin-left: 140px;
 }
@@ -25,11 +26,13 @@ dl.inline dd {
     display: inline;
     margin: 0;
 }
-dl.inline dd:after{
+
+dl.inline dd:after {
     display: block;
     content: '';
 }
-dl.inline dt{
+
+dl.inline dt {
     display: inline-block;
     min-width: 140px;
 }

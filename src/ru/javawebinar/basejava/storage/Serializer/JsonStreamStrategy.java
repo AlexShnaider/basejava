@@ -1,6 +1,6 @@
 package ru.javawebinar.basejava.storage.Serializer;
 
-import ru.javawebinar.basejava.model.*;
+import ru.javawebinar.basejava.model.Resume;
 import ru.javawebinar.basejava.util.JsonParser;
 
 import java.io.*;
